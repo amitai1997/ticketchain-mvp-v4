@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI(
     title="TicketChain API",
     description="Blockchain-based ticketing system API",
-    version="0.1.0"
+    version="0.1.0",
 )
 
 # Configure CORS
@@ -23,16 +23,12 @@ app.add_middleware(
 
 
 @app.get("/")
-async def root():
+async def root() -> dict:
     """Root endpoint - health check."""
     return {"message": "Hello from TicketChain API", "status": "healthy"}
 
 
 @app.get("/api/v1/health")
-async def health_check():
+async def health_check() -> dict:
     """Health check endpoint."""
-    return {
-        "status": "healthy",
-        "service": "ticketchain-api",
-        "version": "0.1.0"
-    }
+    return {"status": "healthy", "service": "ticketchain-api", "version": "0.1.0"}

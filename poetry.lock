@@ -971,7 +971,6 @@ files = [
 eth-utils = ">=2.0.0"
 hexbytes = ">=0.1.0,<1"
 rlp = ">=0.6.0"
-typing-extensions = {version = ">=4.0.1", markers = "python_version <= \"3.11\""}
 
 [package.extras]
 dev = ["build (>=0.9.0)", "bumpversion (>=0.5.3)", "eth-hash[pycryptodome]", "ipython", "pre-commit (>=3.4.0)", "pytest (>=7.0.0)", "pytest-xdist (>=2.4.0)", "sphinx (>=6.0.0)", "sphinx-rtd-theme (>=1.0.0)", "towncrier (>=21,<22)", "tox (>=4.0.0)", "twine", "wheel"]
@@ -3391,5 +3390,5 @@ propcache = ">=0.2.1"
 
 [metadata]
 lock-version = "2.1"
-python-versions = "^3.11"
-content-hash = "0686dc8c381e4bfcfc2e2985e2dd8a267de70ebe65e48dee9ce6ed94462265f7"
+python-versions = "^3.12"
+content-hash = "fe48f6bff0fd3ecc7456927a11841184e023a17b01b7beac8f1360f000172295"

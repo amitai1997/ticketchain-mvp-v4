@@ -8,7 +8,7 @@ This report provides an exhaustive technical analysis of the OPEN Ticketing Ecos
 The system's economy is powered by the OPN token, which functions as "fuel" for all on-chain transactions.1 A key architectural feature is the decoupling of operational costs from token volatility; fees are denominated in USD and the OPN/USD exchange rate is fixed at the time of an integrator's top-up, providing predictable pricing.1 The ticket lifecycle is managed through a series of asynchronous actions submitted via a unified
 /stream endpoint, a design that favors event-driven architectures common in the ticketing industry.1
 However, the documentation contains a critical ambiguity regarding the platform's underlying blockchain. While all technical specifications, smart contract addresses, and API endpoints explicitly reference the Polygon network, the guides state the protocol is actively migrating to the Sophon blockchain.1 This lack of documented technical details for Sophon presents a significant strategic and developmental risk for any new integrator, making the current documentation an unreliable guide for future-proof implementation.
- 
+
 Part I: System Architecture and Core Concepts
 
 This part establishes the foundational understanding of the ecosystem's architecture, key entities, and the asynchronous communication model that underpins all interactions.
@@ -42,7 +42,7 @@ Integrators must implement one of two mechanisms to receive the final confirmati
 2.	Webhooks / Callbacks: This is the recommended method for real-time systems. When creating an event, the integrator can specify a callbackUrl.1 When the status of any action related to that event is updated (e.g., a ticket mint is confirmed), the Ticket Engine will send a POST request to this HTTPS-secured URL. The payload of this callback contains the
 actionPromise ID, signaling to the integrator's system that it should now query the /actions endpoint to fetch the updated data.1
 This asynchronous model is an architectural imperative. Any integrating system must be designed to be event-driven or capable of managing stateful, long-running processes. A simple synchronous request-response architecture is insufficient. The integrator is responsible for storing the actionPromise and implementing a robust listener (either a webhook endpoint or a polling service) to handle the eventual outcome of the requested blockchain operation.
- 
+
 Part II: API Integration Deep Dive
 
 This part provides a granular analysis of the key API endpoints and data flows that an integrator must implement to interact with the OPEN Ticketing Ecosystem.
@@ -85,7 +85,7 @@ While the /stream endpoint handles all write operations, a set of GET endpoints 
 ●	GET /user/id/{userId} and GET /user/uuid/{userUuid}: These endpoints provide a user-centric view of the data, returning a payload that lists the user's associated wallets and the tickets they contain, both in custodial and non-custodial (custom) wallets.1
 However, for any form of complex data retrieval, analytics, or building a rich front-end application, the documentation consistently directs developers to use the OPN Ticketing Ecosystem Subgraph.1 The Subgraph, hosted on The Graph, indexes all on-chain data in real-time and exposes it via a powerful GraphQL API. The documentation even provides example GraphQL queries for fetching event and ticket data, underscoring its importance.1
 This indicates a clear separation of concerns in the system's query capabilities. The REST API is for simple, key-based lookups of operational data. The Subgraph is the true analytical and comprehensive query layer. An integrator planning to build any data-intensive features must therefore be prepared to work with GraphQL, which represents a distinct technical skill set and integration pattern from the REST API.
- 
+
 Part III: Economic and Protocol Mechanics
 
 This part analyzes the on-chain smart contracts and tokenomic model that underpin the Ticket Engine's functionality. The mechanics are designed to provide predictable costs for integrators while creating a sustainable, revenue-generating protocol.
@@ -124,7 +124,7 @@ PriceOracle	0xBF7...AF9	Provides an on-chain price of OPN in USD, used for non-c
 Registry	0x27B...EC6	Acts as a service locator, tracking the addresses of all other protocol contracts.	-	1
 TopUp	0x748...da	Entrypoint for integrator account top-ups, supporting both OPN and USDC.	-	1
 OPN Token	0x784...2D5	The official ERC-20 contract for the OPN token on the Polygon network.	-	1
- 
+
 Part IV: Staking, Governance, and the Developer Ecosystem
 
 This part covers the components that support the core protocol, including the staking system that underpins the token's value, the developer tools for integration and testing, and the user-facing dashboards.
@@ -151,7 +151,7 @@ Production environment (engine.onopen.xyz) is optimized for high-volume, live ev
 ●	Integrator Dashboard: This is a web-based portal for integrators to manage their account, view usage statistics, see created events and their contract addresses, top up their fuel balance, and set low-balance alerts.1
 ●	Ticket Explorer: This is a public-facing website (explore.onopen.xyz) that acts as a transparent gateway to view all tickets and events registered on the protocol. It allows anyone to see the timeline and on-chain history of an individual ticket using its nftId, browse platform statistics, and view claimed collectibles.1 It serves as a powerful tool for end-users and partners to independently verify the authenticity and status of any ticket.
 ●	Subgraphs: As previously noted, the protocol relies heavily on The Graph for data indexing and querying. Two separate subgraphs are provided: the Ticket Subgraph for all protocol usage and ticketing data, and the Token Subgraph for staking-related information (deposits, withdrawals, etc.). Both are available for Playground and Production, and on both Polygon and Ethereum, exposing all on-chain data via a public GraphQL API.1 This commitment to open, queryable data fosters community development and allows third parties to build applications on top of the OPEN data layer.
- 
+
 Part V: Synthesis and Critical Analysis
 
 This final part synthesizes the preceding analysis into a holistic system view and provides a critical assessment of the documentation's ambiguities and gaps, which are crucial for risk evaluation by a prospective integrator.
