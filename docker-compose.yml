@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  # FastAPI Backend Service
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.api
+    ports:
+      - "8000:8000"
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - DATABASE_URL=sqlite:///./data/ticketchain.db
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+    command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - ticketchain-network
+
+  # Hardhat Development Node
+  hardhat:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.hardhat
+    ports:
+      - "8545:8545"
+    volumes:
+      - ./contracts:/app/contracts
+      - ./scripts:/app/scripts
+      - ./test:/app/test
+      - ./hardhat.config.js:/app/hardhat.config.js
+    command: npx hardhat node --hostname 0.0.0.0
+    networks:
+      - ticketchain-network
+
+networks:
+  ticketchain-network:
+    driver: bridge

@@ -1,0 +1,24 @@
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy Hardhat configuration
+COPY hardhat.config.js ./
+
+# Copy contracts, scripts, and tests
+COPY contracts ./contracts
+COPY scripts ./scripts
+COPY test ./test
+
+# Expose Hardhat node port
+EXPOSE 8545
+
+# Default command
+CMD ["npx", "hardhat", "node", "--hostname", "0.0.0.0"]
