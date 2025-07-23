@@ -2,6 +2,7 @@
 
 import pytest
 from fastapi.testclient import TestClient
+
 from src.api.main import app
 
 
@@ -17,7 +18,7 @@ def test_root_endpoint(client):
     assert response.status_code == 200
     assert response.json() == {
         "message": "Hello from TicketChain API",
-        "status": "healthy"
+        "status": "healthy",
     }
 
 

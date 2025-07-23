@@ -32,7 +32,7 @@ ticketchain-blockchain/
 ### Prerequisites
 
 - Node.js >= 18.0.0
-- Python >= 3.11
+- Python >= 3.12
 - Poetry (Python dependency management)
 
 ### Installation

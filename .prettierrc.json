@@ -1,0 +1,33 @@
+{
+  "overrides": [
+    {
+      "files": "*.sol",
+      "options": {
+        "printWidth": 120,
+        "tabWidth": 4,
+        "useTabs": false,
+        "singleQuote": false,
+        "bracketSpacing": true
+      }
+    },
+    {
+      "files": ["*.js", "*.ts"],
+      "options": {
+        "printWidth": 100,
+        "tabWidth": 2,
+        "useTabs": false,
+        "singleQuote": true,
+        "semi": true,
+        "trailingComma": "es5"
+      }
+    },
+    {
+      "files": ["*.json", "*.yml", "*.yaml"],
+      "options": {
+        "printWidth": 100,
+        "tabWidth": 2,
+        "useTabs": false
+      }
+    }
+  ]
+}
