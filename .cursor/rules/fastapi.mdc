@@ -1,0 +1,42 @@
+---
+alwaysApply: true
+---
+Project Structure
+	•	Separate main.py entrypoint from feature routers.
+	•	Organize code into api, services, models, core packages.
+	•	Load settings via Pydantic BaseSettings class.
+	•	Use __init__.py to expose public API of each package.
+
+Routing & Endpoints
+	•	Register routers with clear prefix and tags.
+	•	Use plural nouns and kebab-case paths.
+	•	Annotate parameters with types for automatic validation.
+	•	Return Pydantic response models; avoid dict literals.
+	•	Paginate large collections with limit and offset query params.
+
+Dependency Injection & Validation
+	•	Use Depends for database sessions and common auth logic.
+	•	Limit dependencies per endpoint to maintain readability.
+	•	Leverage reusable @validator methods in schemas.
+	•	Cache heavy dependencies with lru_cache singleton pattern.
+
+Performance & Concurrency
+	•	Prefer async endpoints when IO-bound; keep CPU work sync.
+	•	Use asyncpg or motor for non-blocking database access.
+	•	Offload CPU tasks to thread pool via run_in_threadpool.
+	•	Configure Uvicorn with multiple workers for multicore machines.
+
+Security & Error Handling
+	•	Protect routes with OAuth2 Password Bearer or API keys.
+	•	Use HTTPException with specific status codes.
+	•	Add global exception handler to log unhandled errors.
+	•	Sanitize outbound messages; never leak stack traces.
+
+Observability & Docs
+	•	Enable OpenAPI docs at /docs and /redoc.
+	•	Add descriptive summary, detail, and response codes to endpoints.
+	•	Integrate Prometheus middleware for metrics.
+	•	Log requests with correlation IDs for tracing.
+
+Testing & CI
+	•	Use pytest and httpx AsyncClient for integration

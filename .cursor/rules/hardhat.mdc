@@ -1,0 +1,29 @@
+---
+alwaysApply: true
+---
+Setup & Project Structure
+	•	Install via npm install --save-dev hardhat in project root.
+	•	Initialize workspace with npx hardhat; commit generated config.
+	•	Keep contracts under contracts/; tests in test/.
+	•	Store deployment scripts inside scripts/ directory.
+	•	Version-lock solc via @nomicfoundation/hardhat-toolbox config.
+
+Configuration & Networks
+	•	Define networks in hardhat.config.js with RPC URL and chainId.
+	•	Load secrets (private keys, RPC URLs) from .env via dotenv.
+	•	Use Hardhat Network for local dev; fork mainnet for integration tests.
+	•	Enable Etherscan API key for automatic verification.
+	•	Set gas reporter plugin to monitor cost in CI.
+
+Compilation & Artifacts
+	•	Run npx hardhat compile before tests and deploys.
+	•	Output artifacts to artifacts/; commit only ABI if required.
+	•	Turn on optimizer with ≥200 runs for production.
+	•	Reserve contract names and storage to support upgrades.
+
+Testing
+	•	Write tests in Mocha/Chai with ethers helpers.
+	•	Use fixtures and snapshots to isolate state per test.
+	•	Include negative tests asserting revert reasons.
+	•	Run coverage with hardhat-coverage plugin in CI.
+	•	Execute tests with npx hardhat test --network hardhat.

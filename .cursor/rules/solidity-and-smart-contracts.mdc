@@ -1,0 +1,43 @@
+---
+alwaysApply: true
+---
+
+**Syntax & Style**
+
+* Follow Solidity v0.8.x; specify pragma explicitly.
+* Use SPDX identifier top‑of‑file.
+* Order: pragma, imports, interfaces, libraries, contracts.
+* Name contracts PascalCase; variables camelCase.
+* Document functions with NatSpec comments.
+
+**Security**
+
+* Use OpenZeppelin libraries; avoid custom reinvented wheels.
+* Check external calls; guard reentrancy with modifiers.
+* Validate input using `require`; include descriptive error strings.
+* Declare immutable or constant for static data.
+* Emit events for every state mutation.
+
+**Gas & Optimization**
+
+* Pack storage variables to minimize slots.
+* Employ `unchecked` blocks when overflow safe.
+* Short‑circuit expensive conditions early.
+* Cache external contract addresses locally.
+* Avoid loops over unbounded dynamic arrays.
+
+**Contract Architecture**
+
+* Separate logic and data via proxy pattern.
+* Restrict privileged functions with access‑control modifiers.
+* Keep fallback function minimal and nonpayable by default.
+* Externalize configuration through constructor or setters.
+* Implement pausability and emergency withdraw functions.
+
+**Testing & Deployment**
+
+* Write unit tests with Foundry or Hardhat frameworks.
+* Use mainnet‑fork tests for critical integrations.
+* Run static analysis (Slither, MythX) in CI.
+* Auto‑verify contracts on explorer post‑deploy.
+* Include upgradeability tests for proxy contracts.
