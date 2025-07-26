@@ -53,4 +53,7 @@ def get_contract_abi() -> list:
     with open(abi_path) as f:
         contract_json = json.load(f)
 
-    return contract_json["abi"]
+    abi = contract_json.get("abi", [])
+    if not isinstance(abi, list):
+        raise ValueError(f"Invalid ABI format in {abi_path}")
+    return abi

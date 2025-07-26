@@ -11,7 +11,7 @@ Stage 3 "Off-Chain Core & Blockchain Integration" is **COMPLETE** with all 4 pha
   - Request/response models for all ticket operations
   - Type-safe validation for blockchain addresses and prices
   - Status enums matching smart contract states
-  
+
 - **Blockchain Service Interface** (`src/blockchain_service/interface.py`)
   - Abstract base class defining blockchain operations
   - Mock implementation for development/testing

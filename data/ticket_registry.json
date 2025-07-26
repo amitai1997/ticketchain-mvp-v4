@@ -9,9 +9,9 @@
   "TEST001": 0,
   "TEST002": 1,
   "TEST003": 2,
-  "test-ticket-001": 7,
-  "test-ticket-resale-001": 8,
-  "test-ticket-invalid-001": 9,
+  "test-ticket-001": 12,
+  "test-ticket-resale-001": 13,
+  "test-ticket-invalid-001": 14,
   "INTEGRATION_TEST_001": 0,
   "ticket-20250726-212556": 10,
   "invalid-ticket-20250726-212556": 11

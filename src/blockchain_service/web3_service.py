@@ -3,7 +3,7 @@ Web3 implementation of the blockchain service for real blockchain interactions.
 """
 
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from eth_account import Account
 from web3 import Web3
@@ -49,16 +49,16 @@ class Web3BlockchainService(BlockchainServiceInterface):
         )
 
         # Cache for gas prices
-        self._last_gas_price = None
+        self._last_gas_price: Optional[int] = None
 
     async def _get_gas_price(self) -> int:
         """Get current gas price with caching."""
         # In production, implement proper caching with TTL
         if self._last_gas_price is None:
-            self._last_gas_price = self.w3.eth.gas_price
+            self._last_gas_price = int(self.w3.eth.gas_price)
         return self._last_gas_price
 
-    async def _send_transaction(self, func) -> Dict[str, Any]:
+    async def _send_transaction(self, func: Any) -> dict[str, Any]:
         """
         Build, sign, and send a transaction.
 
@@ -107,7 +107,7 @@ class Web3BlockchainService(BlockchainServiceInterface):
         self,
         to_address: str,
         token_uri: str,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Mint a new ticket NFT on the blockchain."""
         try:
             # Call the mintTicket function
@@ -143,7 +143,7 @@ class Web3BlockchainService(BlockchainServiceInterface):
         except Exception as e:
             raise Exception(f"Failed to mint ticket: {str(e)}") from e
 
-    async def check_in_ticket(self, token_id: int) -> Dict[str, Any]:
+    async def check_in_ticket(self, token_id: int) -> dict[str, Any]:
         """Check in a ticket by updating its on-chain state."""
         try:
             # Call the checkIn function
@@ -166,7 +166,7 @@ class Web3BlockchainService(BlockchainServiceInterface):
         except Exception as e:
             raise Exception(f"Failed to check in ticket: {str(e)}") from e
 
-    async def invalidate_ticket(self, token_id: int) -> Dict[str, Any]:
+    async def invalidate_ticket(self, token_id: int) -> dict[str, Any]:
         """Invalidate a ticket by updating its on-chain state."""
         try:
             # Call the invalidate function
@@ -194,7 +194,7 @@ class Web3BlockchainService(BlockchainServiceInterface):
         token_id: int,
         from_address: str,
         to_address: str,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Transfer a ticket NFT from one address to another."""
         try:
             # Use owner-controlled transfer function
@@ -235,7 +235,7 @@ class Web3BlockchainService(BlockchainServiceInterface):
                 2: "Invalidated",
             }
 
-            return status_map.get(status_code, "Unknown")
+            return str(status_map.get(status_code, "Unknown"))
 
         except Exception as e:
             raise Exception(f"Failed to get ticket status: {str(e)}") from e
@@ -245,7 +245,7 @@ class Web3BlockchainService(BlockchainServiceInterface):
         try:
             # Call the ownerOf function
             owner = self.contract.functions.ownerOf(token_id).call()
-            return owner
+            return str(owner)
 
         except Exception as e:
             raise Exception(f"Failed to get ticket owner: {str(e)}") from e

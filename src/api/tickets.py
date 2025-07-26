@@ -136,6 +136,11 @@ async def resold_ticket(
             )
 
         token_id = registry.get_token_id(request.ticket_id)
+        if token_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Token ID not found for ticket {request.ticket_id}",
+            )
 
         # Get current owner
         current_owner = await blockchain_service.get_ticket_owner(token_id)
@@ -193,6 +198,11 @@ async def checked_in_ticket(
             )
 
         token_id = registry.get_token_id(request.ticket_id)
+        if token_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Token ID not found for ticket {request.ticket_id}",
+            )
 
         # Check in the ticket
         result = await blockchain_service.check_in_ticket(token_id)
@@ -243,6 +253,11 @@ async def invalidate_ticket(
             )
 
         token_id = registry.get_token_id(request.ticket_id)
+        if token_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Token ID not found for ticket {request.ticket_id}",
+            )
 
         # Invalidate the ticket
         result = await blockchain_service.invalidate_ticket(token_id)

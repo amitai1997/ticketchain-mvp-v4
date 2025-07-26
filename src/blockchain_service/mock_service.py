@@ -3,7 +3,7 @@ Mock implementation of the blockchain service for development and testing.
 """
 
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 from .interface import BlockchainServiceInterface
 
@@ -11,16 +11,16 @@ from .interface import BlockchainServiceInterface
 class MockBlockchainService(BlockchainServiceInterface):
     """Mock blockchain service that returns fake data for development."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Track ticket states in memory for the mock
         self._next_token_id = 1
-        self._tickets: Dict[int, Dict[str, Any]] = {}
+        self._tickets: dict[int, dict[str, Any]] = {}
 
     async def mint_ticket(
         self,
         to_address: str,
         token_uri: str,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Mock ticket minting."""
         token_id = self._next_token_id
         self._next_token_id += 1
@@ -39,7 +39,7 @@ class MockBlockchainService(BlockchainServiceInterface):
             "timestamp": datetime.now().isoformat(),
         }
 
-    async def check_in_ticket(self, token_id: int) -> Dict[str, Any]:
+    async def check_in_ticket(self, token_id: int) -> dict[str, Any]:
         """Mock ticket check-in."""
         if token_id in self._tickets:
             self._tickets[token_id]["status"] = "CheckedIn"
@@ -52,7 +52,7 @@ class MockBlockchainService(BlockchainServiceInterface):
             "new_status": "CheckedIn",
         }
 
-    async def invalidate_ticket(self, token_id: int) -> Dict[str, Any]:
+    async def invalidate_ticket(self, token_id: int) -> dict[str, Any]:
         """Mock ticket invalidation."""
         if token_id in self._tickets:
             self._tickets[token_id]["status"] = "Invalidated"
@@ -70,7 +70,7 @@ class MockBlockchainService(BlockchainServiceInterface):
         token_id: int,
         from_address: str,
         to_address: str,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Mock ticket transfer."""
         if token_id in self._tickets:
             self._tickets[token_id]["owner"] = to_address
@@ -87,11 +87,11 @@ class MockBlockchainService(BlockchainServiceInterface):
     async def get_ticket_status(self, token_id: int) -> str:
         """Mock get ticket status."""
         if token_id in self._tickets:
-            return self._tickets[token_id]["status"]
+            return str(self._tickets[token_id]["status"])
         return "Invalid"
 
     async def get_ticket_owner(self, token_id: int) -> str:
         """Mock get ticket owner."""
         if token_id in self._tickets:
-            return self._tickets[token_id]["owner"]
+            return str(self._tickets[token_id]["owner"])
         return "0x0000000000000000000000000000000000000000"

@@ -121,7 +121,7 @@ async def test_my_feature(api_client, w3, ticket_contract):
     # 1. Make API call
     response = await api_client.post("/api/v1/endpoint", json={...})
     assert response.status_code == 200
-    
+
     # 2. Verify on-chain state
     on_chain_data = ticket_contract.functions.someMethod().call()
     assert on_chain_data == expected_value

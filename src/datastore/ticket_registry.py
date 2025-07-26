@@ -7,7 +7,7 @@ In production, this would be replaced with a proper database.
 
 import json
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Optional
 
 
 class TicketRegistry:
@@ -21,7 +21,7 @@ class TicketRegistry:
             storage_path: Optional path to persist the registry to disk
         """
         self.storage_path = storage_path
-        self._registry: Dict[str, int] = {}
+        self._registry: dict[str, int] = {}
 
         # Load existing data if storage path provided
         if self.storage_path and Path(self.storage_path).exists():
@@ -43,6 +43,10 @@ class TicketRegistry:
 
     def _load_from_disk(self) -> None:
         """Load registry from disk."""
+        if self.storage_path is None:
+            self._registry = {}
+            return
+
         try:
             with open(self.storage_path) as f:
                 self._registry = json.load(f)
@@ -52,6 +56,9 @@ class TicketRegistry:
 
     def _save_to_disk(self) -> None:
         """Save registry to disk."""
+        if self.storage_path is None:
+            return
+
         try:
             # Ensure directory exists
             Path(self.storage_path).parent.mkdir(parents=True, exist_ok=True)
