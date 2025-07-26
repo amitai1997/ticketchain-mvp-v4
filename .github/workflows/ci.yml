@@ -72,7 +72,59 @@ jobs:
         run: poetry run mypy src
 
       - name: Run tests
-        run: poetry run pytest --cov=src
+        run: poetry run pytest tests/unit --cov=src
+
+  # Integration Tests
+  integration-tests:
+    runs-on: ubuntu-latest
+    needs: [solidity-tests, python-tests]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Install Python dependencies
+        run: poetry install --no-interaction
+
+      - name: Start services with Docker Compose
+        run: |
+          docker-compose up -d hardhat
+          sleep 10  # Wait for Hardhat to be ready
+
+      - name: Deploy contracts
+        run: |
+          npx hardhat run scripts/setup_dev.js --network localhost
+          echo "TICKET_CONTRACT_ADDRESS=$(cat data/deployment.json | grep -o '"contractAddress":"[^"]*' | grep -o '[^"]*$')" >> $GITHUB_ENV
+
+      - name: Start API server
+        run: |
+          poetry run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 &
+          sleep 5  # Wait for API to start
+
+      - name: Run integration tests
+        run: poetry run pytest tests/integration -v
+
+      - name: Stop services
+        if: always()
+        run: docker-compose down
 
   # Security scan
   security:

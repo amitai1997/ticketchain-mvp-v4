@@ -77,19 +77,28 @@ open http://localhost:8000/docs
    - Add transaction monitoring
    - Implement retry logic for failed transactions
 
-## Phase 3: Integration Testing & CI (Planned)
+## Phase 3: Integration Testing & CI ✅
 
-### What Will Be Built
+### What Was Built
 
-1. **End-to-End Tests**:
-   - Full workflow from API to blockchain
-   - State verification on-chain
-   - Error scenario testing
+1. **End-to-End Tests** (`tests/integration/test_ticket_lifecycle.py`):
+   - Full ticket lifecycle test (mint → check-in)
+   - Ticket resale functionality test
+   - Ticket invalidation test
+   - On-chain state verification after each operation
+   - Error handling tests for edge cases
 
-2. **CI Pipeline Updates**:
-   - Docker Compose for test environment
-   - Parallel test execution
-   - Coverage reporting
+2. **Test Infrastructure**:
+   - Pytest fixtures for Web3 and contract interaction
+   - Async test support with httpx
+   - Integration test runner script
+   - Docker Compose enhancements for testing
+
+3. **CI Pipeline Updates** (`.github/workflows/ci.yml`):
+   - New integration test job
+   - Automated Hardhat node startup
+   - Contract deployment in CI
+   - Full stack testing in GitHub Actions
 
 ## Phase 4: Docker Polish & Documentation (Planned)
 
