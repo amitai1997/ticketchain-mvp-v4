@@ -1,0 +1,9 @@
+{
+  "test-ticket-gas-fixed": 1,
+  "test-ticket-full-integration": 0,
+  "test-ticket-invalidation": 1,
+  "test-ticket-new-contract": 2,
+  "test-ticket-invalidate": 3,
+  "ticket-20250726-204310": 4,
+  "invalid-ticket-20250726-204310": 5
+}

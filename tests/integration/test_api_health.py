@@ -2,9 +2,8 @@
 Simple health check tests to verify integration test setup.
 """
 
-import pytest
 import httpx
-
+import pytest
 
 API_BASE_URL = "http://localhost:8000"
 
@@ -20,10 +19,10 @@ async def test_api_health():
         assert data["service"] == "ticketchain-api"
 
 
-@pytest.mark.asyncio 
+@pytest.mark.asyncio
 async def test_api_docs():
     """Test that API documentation is accessible."""
     async with httpx.AsyncClient(base_url=API_BASE_URL) as client:
         response = await client.get("/docs")
         assert response.status_code == 200
-        assert "FastAPI" in response.text
+        assert "Swagger UI" in response.text

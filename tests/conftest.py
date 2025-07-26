@@ -2,11 +2,11 @@
 Pytest configuration for integration tests.
 """
 
-import os
-import sys
-import pytest
 import asyncio
+import sys
 from pathlib import Path
+
+import pytest
 
 # Add src to Python path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -22,9 +22,7 @@ def event_loop():
 
 def pytest_configure(config):
     """Configure pytest with custom markers."""
-    config.addinivalue_line(
-        "markers", "integration: mark test as an integration test"
-    )
+    config.addinivalue_line("markers", "integration: mark test as an integration test")
 
 
 def pytest_collection_modifyitems(config, items):

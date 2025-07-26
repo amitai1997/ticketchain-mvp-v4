@@ -1,51 +1,44 @@
 ---
 alwaysApply: true
 ---
-# Cursor Rules – DRY (Don't Repeat Yourself)
+Cursor Rules – DRY (Don’t Repeat Yourself)
 
-**Core Concepts**
+Core Concepts
+	•	Eliminate duplication of knowledge, logic, and intent across codebase.
+	•	Treat tests, docs, and configs as first-class citizens in DRY effort.
+	•	Refactor repeated patterns into single authoritative abstractions.
+	•	Prefer composition and parameterization over copy-paste.
 
-* Eliminate duplication of knowledge, logic, and intent across codebase.
-* Treat tests, docs, and configs as first‑class citizens in DRY effort.
-* Refactor repeated patterns into single authoritative abstractions.
-* Prefer composition and parameterization over copy‑paste.
+Code Organization
+	•	Centralize shared constants and configuration in one module.
+	•	Encapsulate reusable behaviors inside libraries or services.
+	•	Use generic algorithms and templates for variant workflows.
+	•	Apply inheritance sparingly; avoid deep hierarchies.
+	•	Keep database schema definitions in one place; generate models.
 
-**Code Organization**
+Abstraction & Reuse
+	•	Extract duplicate code into self-contained functions with clear APIs.
+	•	Avoid premature abstraction; ensure patterns appear ≥3 times first.
+	•	Expose extension points (hooks, interfaces) instead of forks.
+	•	Compose pipelines from smaller, reusable operators.
 
-* Centralize shared constants and configuration in one module.
-* Encapsulate reusable behaviors inside libraries or services.
-* Use generic algorithms and templates for variant workflows.
-* Apply inheritance sparingly; avoid deep hierarchies.
-* Keep database schema definitions in one place; generate models.
+Documentation & Specs
+	•	Source API docs from code annotations to avoid drift.
+	•	Maintain single reference architecture diagram; update on change.
+	•	Use schema definition languages (OpenAPI, GraphQL SDL) to drive codegen.
 
-**Abstraction & Reuse**
+Tooling & Automation
+	•	Run duplicate-code detectors (e.g., jscpd, Sonar) in CI.
+	•	Generate client SDKs and typed models from proto/spec files.
+	•	Employ code generation for repetitive boilerplate (ORM, typed clients).
+	•	Use templates or scaffolding tools for consistent new modules.
 
-* Extract duplicate code into self‑contained functions with clear APIs.
-* Avoid premature abstraction; ensure patterns appear ≥3 times first.
-* Expose extension points (hooks, interfaces) instead of forks.
-* Compose pipelines from smaller, reusable operators.
+Testing & Validation
+	•	Write parameterized tests instead of cloning similar cases.
+	•	DRY test data via fixtures and factories.
+	•	Verify abstraction correctness with shared test suites.
 
-**Documentation & Specs**
-
-* Source API docs from code annotations to avoid drift.
-* Maintain single reference architecture diagram; update on change.
-* Use schema definition languages (OpenAPI, GraphQL SDL) to drive codegen.
-
-**Tooling & Automation**
-
-* Run duplicate‑code detectors (e.g., jscpd, Sonar) in CI.
-* Generate client SDKs and typed models from proto/spec files.
-* Employ code generation for repetitive boilerplate (ORM, typed clients).
-* Use templates or scaffolding tools for consistent new modules.
-
-**Testing & Validation**
-
-* Write parameterized tests instead of cloning similar cases.
-* DRY test data via fixtures and factories.
-* Verify abstraction correctness with shared test suites.
-
-**Review & Maintenance**
-
-* Flag copy‑paste commits during code review; suggest refactor.
-* Schedule periodic refactoring sessions to consolidate drift.
-* Track duplication metrics; set threshold alerts in CI.
+Review & Maintenance
+	•	Flag copy-paste commits during code review; suggest refactor.
+	•	Schedule periodic refactoring sessions to consolidate drift.
+	•	Track duplication metrics; set threshold alerts in CI.

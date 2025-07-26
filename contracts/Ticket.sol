@@ -50,6 +50,19 @@ contract Ticket is ERC721, Ownable {
     }
 
     /**
+     * @dev Owner-controlled transfer function for ticket resales
+     * @param from Current owner of the ticket
+     * @param to New owner of the ticket
+     * @param tokenId ID of the ticket to transfer
+     */
+    function ownerTransfer(address from, address to, uint256 tokenId) external onlyOwner {
+        require(_ownerOf(tokenId) == from, "From address is not the owner");
+        require(ticketStatuses[tokenId] == TicketStatus.Valid, "Ticket is not transferable");
+
+        _transfer(from, to, tokenId);
+    }
+
+    /**
      * @dev Check in a ticket
      * @param tokenId ID of the ticket to check in
      */
