@@ -22,7 +22,7 @@ async def test_ticket_lifecycle():
     """Test the complete ticket lifecycle with real blockchain integration."""
 
     # Configuration
-    api_base = "http://localhost:8001"
+    api_base = "http://localhost:8000"
 
     print("🎫 TicketChain End-to-End Integration Test")
     print("=" * 50)
