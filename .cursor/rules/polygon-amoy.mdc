@@ -1,0 +1,31 @@
+---
+alwaysApply: true
+---
+Cursor Rules – Polygon Amoy
+
+Network Setup
+	•	Add Amoy in wallet using JSON-RPC details, not preset networks.
+	•	Pin public RPC endpoints; fallback to private node when throughput critical.
+	•	Use gas price oracle; avoid fixed gas values.
+
+Tokens & Faucet
+	•	Acquire test MATIC via official Amoy faucet after GitHub OAuth.
+	•	Request small amounts; respect faucet cooldown rules.
+	•	Transfer test MATIC between dev wallets to simulate user flows.
+	•	Never purchase or sell test tokens; they hold no value.
+
+Deployment & Testing
+	•	Compile contracts with Solidity 0.8.x and optimizer on 200 runs.
+	•	Deploy via Hardhat/Foundry using Amoy network config.
+	•	Verify contracts automatically on Amoy block explorer.
+	•	Run integration tests on forked Amoy state for realism.
+
+Bridge & Interoperability
+	•	Bridge assets from Goerli using Polygon PoS bridge test environment.
+	•	Confirm checkpoints finality before relying on bridged balances.
+	•	Monitor cross-chain events; handle duplicate mint or burn gracefully.
+
+Monitoring & Maintenance
+	•	Track RPC status, block lag, and gas spikes via explorer APIs.
+	•	Rotate dev keys; treat testnet keys with same hygiene as mainnet.
+	•	Clean up orphan test contracts monthly to reduce clutter.
