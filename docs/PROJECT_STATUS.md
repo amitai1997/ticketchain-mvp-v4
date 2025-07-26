@@ -37,7 +37,7 @@ Build a minimal viable blockchain ticketing system that:
 
 ### 3. **Backend API Framework**
 - **FastAPI** application with:
-  - Modern Python 3.11 setup
+  - Modern Python 3.12 setup
   - Poetry for dependency management
   - Basic health check endpoints
   - CORS middleware configured
@@ -130,7 +130,7 @@ ticketchain-blockchain/
 - **Ethers.js** 6.x - Blockchain interaction library
 
 ### Backend Layer
-- **Python** 3.11 - Primary backend language
+- **Python** 3.12 - Primary backend language
 - **FastAPI** 0.110.0 - High-performance async web framework
 - **Web3.py** 6.20.4 - Python Ethereum library
 - **SQLAlchemy** 2.0.41 - SQL toolkit and ORM
@@ -196,7 +196,7 @@ ticketchain-blockchain/
 
 ### Prerequisites
 - Node.js >= 18.0.0
-- Python >= 3.11
+- Python >= 3.12
 - Poetry installed
 - Docker & Docker Compose
 

@@ -13,7 +13,7 @@ Stage 1 has successfully set up a dual-stack project foundation for the TicketCh
 - **Node.js**: v18 - JavaScript runtime
 
 ### Backend Layer
-- **Python**: v3.11 - Primary backend language
+- **Python**: v3.12 - Primary backend language
 - **FastAPI**: v0.110.0 - Modern, async web framework
 - **Web3.py**: v6.20.4 - Ethereum blockchain interaction
 - **SQLAlchemy**: v2.0.41 - Database ORM
