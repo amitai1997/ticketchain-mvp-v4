@@ -5,6 +5,8 @@ Main FastAPI application for TicketChain backend.
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from .tickets import router as tickets_router
+
 # Create FastAPI app instance
 app = FastAPI(
     title="TicketChain API",
@@ -20,6 +22,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(tickets_router)
 
 
 @app.get("/")
