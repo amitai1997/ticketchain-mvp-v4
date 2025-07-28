@@ -164,8 +164,11 @@ jobs:
 
       - name: Start API server
         run: |
-          # Load environment variables from .env file and set them directly
+          # Export environment variables from .env file
+          set -a
           source .env
+          set +a
+
           echo "Starting API with contract address: $TICKET_CONTRACT_ADDRESS"
           echo "RPC URL: $RPC_URL"
           echo "Deployer key set: $([ -n "$DEPLOYER_PRIVATE_KEY" ] && echo 'YES' || echo 'NO')"
@@ -180,12 +183,7 @@ jobs:
             echo "Error: RPC_URL not set"
           fi
 
-          # Start API with environment variables explicitly set
-          TICKET_CONTRACT_ADDRESS="$TICKET_CONTRACT_ADDRESS" \
-          RPC_URL="$RPC_URL" \
-          DEPLOYER_PRIVATE_KEY="$DEPLOYER_PRIVATE_KEY" \
-          CHAIN_ID="$CHAIN_ID" \
-          TICKET_CONTRACT_ABI_PATH="$TICKET_CONTRACT_ABI_PATH" \
+          # Start API server with exported environment variables
           nohup poetry run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 > api.log 2>&1 &
 
           API_PID=$!
@@ -204,7 +202,7 @@ jobs:
 
           # Show API logs for debugging
           echo "=== API Startup Logs ==="
-          head -20 api.log || true
+          head -50 api.log || true
           echo "========================"
 
       - name: Verify API configuration
