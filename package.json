@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "hardhat test",
+    "test:ci-local": "./scripts/test_ci_locally.sh",
     "format": "prettier --write \"**/*.{js,json,sol,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{js,json,sol,yml,yaml}\"",
     "lint:sol": "solhint \"contracts/**/*.sol\"",
