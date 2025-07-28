@@ -5,6 +5,7 @@
 
 const hre = require('hardhat');
 const fs = require('fs');
+const path = require('path');
 
 async function main() {
   console.log('🚀 Starting development setup...\n');
@@ -28,26 +29,45 @@ async function main() {
 
   // Write deployment info to a file
   const deploymentInfo = {
-    network: hre.network.name,
-    contractAddress: contractAddress,
-    deployerAddress: deployer.address,
-    timestamp: new Date().toISOString(),
+    TICKET_CONTRACT_ADDRESS: contractAddress,
+    DEPLOYMENT_NETWORK: hre.network.name,
+    DEPLOYMENT_CONTRACT_ADDRESS: contractAddress,
+    DEPLOYMENT_DEPLOYER_ADDRESS: deployer.address,
   };
 
-  // Ensure data directory exists
-  if (!fs.existsSync('data')) {
-    fs.mkdirSync('data');
-  }
-
-  fs.writeFileSync('data/deployment.json', JSON.stringify(deploymentInfo, null, 2));
-
-  // Output .env configuration
-  console.log('\n📋 Add the following to your .env file:');
-  console.log('=====================================');
-  console.log(`TICKET_CONTRACT_ADDRESS=${contractAddress}`);
-  console.log('=====================================');
+  // Update .env file with deployment information
+  updateEnvFile(deploymentInfo);
 
   console.log('\n✨ Setup complete!');
+  console.log(`📋 Contract deployed at: ${contractAddress}`);
+  console.log('📁 Deployment info saved to .env file');
+}
+
+function updateEnvFile(updates) {
+  const envPath = path.join(__dirname, '..', '.env');
+  let envContent = '';
+
+  // Read existing .env file if it exists
+  if (fs.existsSync(envPath)) {
+    envContent = fs.readFileSync(envPath, 'utf8');
+  }
+
+  // Update or add each key-value pair
+  Object.entries(updates).forEach(([key, value]) => {
+    const regex = new RegExp(`^${key}=.*$`, 'm');
+    const newLine = `${key}=${value}`;
+
+    if (regex.test(envContent)) {
+      // Update existing key
+      envContent = envContent.replace(regex, newLine);
+    } else {
+      // Add new key
+      envContent += `\n${newLine}`;
+    }
+  });
+
+  // Write back to .env file
+  fs.writeFileSync(envPath, envContent.trim() + '\n');
 }
 
 main()

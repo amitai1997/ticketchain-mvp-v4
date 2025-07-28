@@ -156,8 +156,10 @@ jobs:
 
       - name: Deploy contracts
         run: |
-          npx hardhat run scripts/setup_dev.js --network localhost
-          echo "TICKET_CONTRACT_ADDRESS=$(cat data/deployment.json | grep -o '"contractAddress":"[^"]*' | grep -o '[^"]*$')" >> $GITHUB_ENV
+          npx hardhat run scripts/deploy.js --network localhost
+          # Source the .env file to get the contract address
+          source .env
+          echo "TICKET_CONTRACT_ADDRESS=$TICKET_CONTRACT_ADDRESS" >> $GITHUB_ENV
 
       - name: Start API server
         run: |

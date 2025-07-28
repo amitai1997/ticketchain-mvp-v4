@@ -21,15 +21,19 @@ fi
 echo -e "${GREEN}✅ Hardhat node is running${NC}"
 
 # Check if contract is deployed
-if [ -z "$TICKET_CONTRACT_ADDRESS" ] && [ ! -f "data/deployment.json" ]; then
+if [ -z "$TICKET_CONTRACT_ADDRESS" ] && [ ! -f ".env" ]; then
     echo -e "${YELLOW}⚠️  Contract not deployed. Deploying now...${NC}"
-    npx hardhat run scripts/setup_dev.js --network localhost
+    npx hardhat run scripts/deploy.js --network localhost
 
-    # Extract contract address from deployment.json
-    if [ -f "data/deployment.json" ]; then
-        export TICKET_CONTRACT_ADDRESS=$(grep -o '"contractAddress":"[^"]*' data/deployment.json | grep -o '[^"]*$')
+    # Source the .env file to get contract address
+    if [ -f ".env" ]; then
+        source .env
         echo -e "${GREEN}✅ Contract deployed to: $TICKET_CONTRACT_ADDRESS${NC}"
     fi
+elif [ -f ".env" ] && [ -z "$TICKET_CONTRACT_ADDRESS" ]; then
+    # Load from .env if available
+    source .env
+    echo -e "${GREEN}✅ Using existing contract at: $TICKET_CONTRACT_ADDRESS${NC}"
 fi
 
 # Check if API is running

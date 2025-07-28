@@ -167,7 +167,7 @@ For detailed technology versions and descriptions, see **[Technology Stack Refer
 - **Web3 Integration**: Full blockchain service with transaction management
 - **Access Control**: Secure administrative functions
 - **Ticket Registry**: Off-chain mapping and state management
-- **Comprehensive Testing**: 27 tests across all layers with 100% coverage
+- **Comprehensive Testing**: 26 tests across all layers with 100% coverage
 - **CI/CD Pipeline**: Automated testing and quality checks
 - **Live System**: Fully functional API server with blockchain integration
 
