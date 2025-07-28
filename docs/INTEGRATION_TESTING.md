@@ -169,15 +169,37 @@ poetry run pytest tests/integration/test_ticket_lifecycle.py::test_full_ticket_l
 
 ## CI/CD Integration
 
-The GitHub Actions workflow runs integration tests automatically:
+### GitHub Actions (Automated)
 
-1. Starts Hardhat node in Docker
-2. Deploys contracts
-3. Starts API server
-4. Runs all integration tests
-5. Reports results
+The GitHub Actions workflow runs integration tests automatically with enhanced reliability:
 
-See `.github/workflows/ci.yml` for details.
+1. **Robust Poetry Installation**: Uses pip with fallback to official installer
+2. **Service Health Checks**: Waits for Hardhat node and API server readiness
+3. **Starts Hardhat node in Docker**: With proper health validation
+4. **Deploys contracts**: Automatically configures environment
+5. **Starts API server**: With readiness polling
+6. **Runs all integration tests**: Complete test suite execution
+7. **Reports results**: With detailed logging
+
+### Local CI Testing
+
+Test CI-like conditions before pushing:
+
+```bash
+# Run local CI simulation
+npm run test:ci-local
+
+# Or directly
+./scripts/test_ci_locally.sh
+```
+
+This catches most issues locally including:
+- Poetry/npm dependency problems
+- Code quality issues (MyPy, Ruff, Black)
+- Test failures
+- Docker configuration issues
+
+See `.github/workflows/ci.yml` for complete CI configuration details.
 
 ## Best Practices
 

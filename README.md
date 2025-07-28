@@ -99,6 +99,13 @@ poetry run pytest --cov=src            # With coverage report
 poetry run pytest -v                   # Verbose output
 ```
 
+### CI Testing (Local)
+```bash
+npm run test:ci-local                   # Test CI-like conditions locally
+./scripts/test_ci_locally.sh            # Direct script execution
+```
+Catches most CI issues before pushing: Poetry/npm problems, code quality issues, test failures, Docker configuration.
+
 ### Run All Tests
 ```bash
 npm test && poetry run pytest          # Quick test everything
@@ -194,10 +201,11 @@ poetry run ruff check src tests                 # Lint code
 poetry run mypy src                              # Type checking
 ```
 
-#### Code Quality
+#### Code Quality & CI Testing
 ```bash
 poetry run pre-commit install          # Setup pre-commit hooks
 poetry run pre-commit run --all-files  # Run all quality checks
+npm run test:ci-local                   # Test CI-like conditions locally
 ```
 
 > **💡 Tip:** See [Development Commands Reference](docs/COMMANDS.md) for comprehensive command documentation and advanced usage.

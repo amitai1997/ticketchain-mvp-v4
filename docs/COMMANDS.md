@@ -68,6 +68,10 @@ docker-compose logs hardhat        # View blockchain logs
 poetry run pre-commit install      # Install hooks
 poetry run pre-commit run --all-files  # Run all checks
 
+# CI Testing (Local)
+npm run test:ci-local              # Test CI-like conditions locally
+./scripts/test_ci_locally.sh       # Direct script execution
+
 # Manual Quality Checks
 npm test && poetry run pytest      # Run all tests
 npx solhint contracts/**/*.sol     # Lint Solidity
