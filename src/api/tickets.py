@@ -46,6 +46,14 @@ async def get_blockchain_service() -> BlockchainServiceInterface:
     # Use real service if contract address is configured
     if settings.ticket_contract_address:
         try:
+            print("🔍 DEBUG: Environment variables:")
+            print(f"  - RPC URL: {settings.rpc_url}")
+            print(f"  - Contract Address: {settings.ticket_contract_address}")
+            print(f"  - Chain ID: {settings.chain_id}")
+            print(
+                f"  - Deployer key set: {'YES' if settings.deployer_private_key else 'NO'}"
+            )
+
             print(
                 f"Attempting to initialize Web3BlockchainService with address: {settings.ticket_contract_address}"
             )

@@ -24,6 +24,16 @@ class Web3BlockchainService(BlockchainServiceInterface):
             contract_address: Address of the deployed Ticket contract.
                             If not provided, will use from settings.
         """
+        # Validate required settings
+        if not settings.rpc_url:
+            raise ValueError("RPC_URL environment variable is required but not set")
+        if not settings.deployer_private_key:
+            raise ValueError(
+                "DEPLOYER_PRIVATE_KEY environment variable is required but not set"
+            )
+
+        print(f"🔍 Initializing Web3 with RPC URL: {settings.rpc_url}")
+
         # Initialize Web3 connection
         self.w3 = Web3(Web3.HTTPProvider(settings.rpc_url))
 
