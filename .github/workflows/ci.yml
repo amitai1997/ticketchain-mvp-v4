@@ -162,7 +162,7 @@ jobs:
           echo "TICKET_CONTRACT_ADDRESS=$TICKET_CONTRACT_ADDRESS" >> $GITHUB_ENV
           echo "Contract deployed at: $TICKET_CONTRACT_ADDRESS"
 
-            - name: Start API server
+      - name: Start API server
         env:
           # Set environment variables directly for CI
           RPC_URL: "http://localhost:8545"
