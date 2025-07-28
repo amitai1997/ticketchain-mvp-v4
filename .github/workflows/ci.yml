@@ -167,6 +167,9 @@ jobs:
           # Load environment variables from .env file
           source .env
           echo "Starting API with contract address: $TICKET_CONTRACT_ADDRESS"
+
+          # Export the variable so it's available to the subprocess
+          export TICKET_CONTRACT_ADDRESS
           poetry run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 &
 
           # Wait for API to be ready with health check
@@ -179,6 +182,20 @@ jobs:
             echo "Waiting for API server... ($i/30)"
             sleep 2
           done
+
+      - name: Verify API configuration
+        run: |
+          echo "Checking API blockchain service configuration..."
+          curl -s http://localhost:8000/api/v1/health | jq '.'
+
+          # Verify we're using the Web3 service
+          SERVICE_TYPE=$(curl -s http://localhost:8000/api/v1/health | jq -r '.blockchain_service')
+          if [ "$SERVICE_TYPE" = "Web3BlockchainService" ]; then
+            echo "✅ API is using Web3BlockchainService"
+          else
+            echo "❌ API is using $SERVICE_TYPE instead of Web3BlockchainService"
+            exit 1
+          fi
 
       - name: Run integration tests
         run: poetry run pytest tests/integration -v

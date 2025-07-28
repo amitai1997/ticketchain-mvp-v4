@@ -44,6 +44,8 @@ if ! curl -s http://localhost:8000/api/v1/health > /dev/null; then
     source .env
     echo -e "${GREEN}📋 Starting API with contract address: $TICKET_CONTRACT_ADDRESS${NC}"
 
+    # Export the variable so it's available to the subprocess
+    export TICKET_CONTRACT_ADDRESS
     poetry run uvicorn src.api.main:app --reload &
     API_PID=$!
 

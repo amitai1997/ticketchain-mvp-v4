@@ -167,6 +167,20 @@ if [ -f ".env" ]; then
     if [ -n "$TICKET_CONTRACT_ADDRESS" ]; then
         echo "✅ Contract address available for integration tests: $TICKET_CONTRACT_ADDRESS"
         echo "💡 Integration tests will use Web3 blockchain service"
+
+        # Check if API is running and verify service type
+        if curl -s http://localhost:8000/api/v1/health >/dev/null 2>&1; then
+            SERVICE_TYPE=$(curl -s http://localhost:8000/api/v1/health 2>/dev/null | grep -o '"blockchain_service":"[^"]*"' | cut -d'"' -f4 || echo "unknown")
+            if [ "$SERVICE_TYPE" = "Web3BlockchainService" ]; then
+                echo "✅ Running API is using Web3BlockchainService"
+            elif [ "$SERVICE_TYPE" = "MockBlockchainService" ]; then
+                echo "⚠️  Running API is using MockBlockchainService (restart with contract address)"
+            else
+                echo "ℹ️  API service type: $SERVICE_TYPE"
+            fi
+        else
+            echo "ℹ️  API not running (will be configured properly when started)"
+        fi
     else
         echo "⚠️  TICKET_CONTRACT_ADDRESS not set - integration tests will be skipped"
         echo "💡 Run 'npx hardhat run scripts/deploy.js --network localhost' to deploy contract"

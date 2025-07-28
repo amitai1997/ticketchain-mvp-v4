@@ -36,4 +36,17 @@ async def root() -> dict:
 @app.get("/api/v1/health")
 async def health_check() -> dict:
     """Health check endpoint."""
-    return {"status": "healthy", "service": "ticketchain-api", "version": "0.1.0"}
+    from ..config import settings
+    from .tickets import get_blockchain_service
+
+    # Get blockchain service info for debugging
+    blockchain_service = await get_blockchain_service()
+    service_type = type(blockchain_service).__name__
+
+    return {
+        "status": "healthy",
+        "service": "ticketchain-api",
+        "version": "0.1.0",
+        "blockchain_service": service_type,
+        "contract_address": settings.ticket_contract_address,
+    }
