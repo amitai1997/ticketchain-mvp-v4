@@ -58,11 +58,13 @@ poetry run uvicorn src.api.main:app --reload
 
 #### Docker Compose (Alternative)
 ```bash
-docker-compose up -d                    # Start all services
-docker-compose logs api                 # View API logs
-docker-compose logs hardhat             # View blockchain logs
-docker-compose down                     # Stop all services
+docker compose up -d                    # Start all services
+docker compose logs api                 # View API logs
+docker compose logs hardhat             # View blockchain logs
+docker compose down                     # Stop all services
 ```
+
+> **Note**: Use `docker-compose` (legacy) if `docker compose` (V2) is not available.
 
 ### Verification
 

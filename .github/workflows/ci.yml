@@ -134,7 +134,7 @@ jobs:
 
       - name: Start services with Docker Compose
         run: |
-          docker-compose up -d hardhat
+          docker compose up -d hardhat
 
           # Wait for Hardhat to be ready with health check
           echo "Waiting for Hardhat node to be ready..."
@@ -172,7 +172,7 @@ jobs:
 
       - name: Stop services
         if: always()
-        run: docker-compose down
+        run: docker compose down
 
   # Security scan
   security:

@@ -53,12 +53,15 @@ poetry run mypy src                # Type checking
 ## Docker Commands
 
 ```bash
-# Container Management
-docker-compose up -d               # Start all services
-docker-compose down                # Stop all services
-docker-compose build               # Build containers
-docker-compose logs api            # View API logs
-docker-compose logs hardhat        # View blockchain logs
+# Container Management (Docker Compose V2)
+docker compose up -d               # Start all services
+docker compose down                # Stop all services
+docker compose build               # Build containers
+docker compose logs api            # View API logs
+docker compose logs hardhat        # View blockchain logs
+
+# Legacy Docker Compose V1 (if V2 not available)
+# Replace 'docker compose' with 'docker-compose' in above commands
 ```
 
 ## Quality Assurance

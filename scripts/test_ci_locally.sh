@@ -88,12 +88,21 @@ if command -v docker >/dev/null 2>&1; then
     echo "🐳 Testing Docker availability..."
     docker --version
 
-    if command -v docker-compose >/dev/null 2>&1 || docker compose version >/dev/null 2>&1; then
-        echo "✅ Docker Compose is available"
+        if docker compose version >/dev/null 2>&1; then
+        echo "✅ Docker Compose V2 is available"
+        DOCKER_COMPOSE_CMD="docker compose"
+    elif command -v docker-compose >/dev/null 2>&1; then
+        echo "✅ Docker Compose V1 is available"
+        DOCKER_COMPOSE_CMD="docker-compose"
+    else
+        echo "⚠️  Docker Compose not available - integration tests may fail in CI"
+        DOCKER_COMPOSE_CMD=""
+    fi
 
+    if [ -n "$DOCKER_COMPOSE_CMD" ]; then
         # Test Docker Compose configuration
         echo "📋 Validating Docker Compose configuration..."
-        docker-compose config >/dev/null || {
+        $DOCKER_COMPOSE_CMD config >/dev/null || {
             echo "❌ Docker Compose configuration invalid"
             exit 1
         }

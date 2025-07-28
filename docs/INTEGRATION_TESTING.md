@@ -63,17 +63,19 @@ This script handles:
 
 ```bash
 # Start all services
-docker-compose up -d
+docker compose up -d
 
 # Wait for contract deployment
 sleep 15
 
 # Run tests
-docker-compose exec api poetry run pytest tests/integration
+docker compose exec api poetry run pytest tests/integration
 
 # Stop services
-docker-compose down
+docker compose down
 ```
+
+> **Note**: Use `docker-compose` instead of `docker compose` if using Docker Compose V1.
 
 ## Test Structure
 
