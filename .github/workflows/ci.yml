@@ -164,21 +164,30 @@ jobs:
 
       - name: Start API server
         run: |
-          # Load environment variables from .env file
+          # Load environment variables from .env file and set them directly
           source .env
           echo "Starting API with contract address: $TICKET_CONTRACT_ADDRESS"
           echo "RPC URL: $RPC_URL"
+          echo "Deployer key set: $([ -n "$DEPLOYER_PRIVATE_KEY" ] && echo 'YES' || echo 'NO')"
 
           # Test connection to Hardhat node
           echo "Testing connection to Hardhat node..."
-          curl -X POST -H "Content-Type: application/json" \
-               --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
-               $RPC_URL || echo "Warning: Could not connect to Hardhat node"
+          if [ -n "$RPC_URL" ]; then
+            curl -X POST -H "Content-Type: application/json" \
+                 --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
+                 $RPC_URL || echo "Warning: Could not connect to Hardhat node"
+          else
+            echo "Error: RPC_URL not set"
+          fi
 
-          # Export the variable so it's available to the subprocess
-          export TICKET_CONTRACT_ADDRESS
-          export RPC_URL
+          # Start API with environment variables explicitly set
+          TICKET_CONTRACT_ADDRESS="$TICKET_CONTRACT_ADDRESS" \
+          RPC_URL="$RPC_URL" \
+          DEPLOYER_PRIVATE_KEY="$DEPLOYER_PRIVATE_KEY" \
+          CHAIN_ID="$CHAIN_ID" \
+          TICKET_CONTRACT_ABI_PATH="$TICKET_CONTRACT_ABI_PATH" \
           nohup poetry run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 > api.log 2>&1 &
+
           API_PID=$!
           echo "API started with PID: $API_PID"
 
