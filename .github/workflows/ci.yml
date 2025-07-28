@@ -149,10 +149,10 @@ jobs:
 
       - name: Prepare artifacts directory
         run: |
-          # Create artifacts directory structure for Hardhat
-          mkdir -p artifacts/build-info
-          mkdir -p artifacts/contracts
-          chmod -R 755 artifacts/
+          # Remove any existing artifacts directory and let Hardhat create it
+          rm -rf artifacts/
+          # Pre-compile contracts to ensure artifacts are created properly
+          npx hardhat compile
 
       - name: Deploy contracts
         run: |

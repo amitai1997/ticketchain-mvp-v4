@@ -66,14 +66,23 @@ if command -v npm >/dev/null 2>&1; then
 
     # Test artifacts directory permissions (CI-like check)
     echo "📁 Testing artifacts directory permissions..."
-    if [ -d "artifacts" ]; then
-        echo "✅ artifacts directory exists"
+    # Remove any existing artifacts directory and let Hardhat create it
+    rm -rf artifacts/
+    echo "🗑️  Cleaned artifacts directory"
+
+    # Test Hardhat compilation (will create artifacts directory)
+    echo "🔨 Testing contract compilation..."
+    npx hardhat compile || {
+        echo "❌ Contract compilation failed"
+        exit 1
+    }
+
+    # Verify artifacts were created properly
+    if [ -d "artifacts" ] && [ -d "artifacts/contracts" ]; then
+        echo "✅ artifacts directory created successfully by Hardhat"
     else
-        echo "📂 Creating artifacts directory structure..."
-        mkdir -p artifacts/build-info artifacts/contracts || {
-            echo "❌ Cannot create artifacts directory - permission issue"
-            exit 1
-        }
+        echo "❌ Hardhat failed to create artifacts directory structure"
+        exit 1
     fi
 
     # Test write permissions
@@ -82,13 +91,6 @@ if command -v npm >/dev/null 2>&1; then
         exit 1
     }
     echo "✅ artifacts directory is writable"
-
-    # Test Hardhat compilation
-    echo "🔨 Testing contract compilation..."
-    npx hardhat compile || {
-        echo "❌ Contract compilation failed"
-        exit 1
-    }
 
     # Test smart contract tests
     echo "🧪 Testing smart contract tests..."
