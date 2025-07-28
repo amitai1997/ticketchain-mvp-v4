@@ -174,37 +174,18 @@ jobs:
           source .env
           export TICKET_CONTRACT_ADDRESS
 
-          echo "Starting API with contract address: $TICKET_CONTRACT_ADDRESS"
-          echo "RPC URL: $RPC_URL"
-          echo "Deployer key set: $([ -n "$DEPLOYER_PRIVATE_KEY" ] && echo 'YES' || echo 'NO')"
-
-          # Test connection to Hardhat node
-          echo "Testing connection to Hardhat node..."
-          curl -X POST -H "Content-Type: application/json" \
-               --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
-               $RPC_URL || echo "Warning: Could not connect to Hardhat node"
-
-          # Start API server with environment variables
+          # Start API server
           nohup poetry run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 > api.log 2>&1 &
 
-          API_PID=$!
-          echo "API started with PID: $API_PID"
-
-          # Wait for API to be ready with health check
+          # Wait for API to be ready
           echo "Waiting for API server to be ready..."
           for i in {1..30}; do
             if curl -sf http://localhost:8000/api/v1/health >/dev/null 2>&1; then
               echo "API server is ready!"
               break
             fi
-            echo "Waiting for API server... ($i/30)"
             sleep 2
           done
-
-          # Show API logs for debugging
-          echo "=== API Startup Logs ==="
-          head -50 api.log || true
-          echo "========================"
 
       - name: Verify API configuration
         run: |

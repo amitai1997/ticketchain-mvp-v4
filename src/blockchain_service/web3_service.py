@@ -32,8 +32,6 @@ class Web3BlockchainService(BlockchainServiceInterface):
                 "DEPLOYER_PRIVATE_KEY environment variable is required but not set"
             )
 
-        print(f"🔍 Initializing Web3 with RPC URL: {settings.rpc_url}")
-
         # Initialize Web3 connection
         self.w3 = Web3(Web3.HTTPProvider(settings.rpc_url))
 
@@ -41,16 +39,10 @@ class Web3BlockchainService(BlockchainServiceInterface):
         self.w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
 
         # Check connection
-        try:
-            if not self.w3.is_connected():
-                raise ConnectionError(
-                    f"Failed to connect to blockchain node at {settings.rpc_url}"
-                )
-            print(f"✅ Connected to blockchain node at {settings.rpc_url}")
-        except Exception as e:
+        if not self.w3.is_connected():
             raise ConnectionError(
-                f"Blockchain connection error to {settings.rpc_url}: {e}"
-            ) from e
+                f"Failed to connect to blockchain node at {settings.rpc_url}"
+            )
 
         # Set up account from private key
         self.account = Account.from_key(settings.deployer_private_key)
