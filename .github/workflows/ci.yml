@@ -162,12 +162,17 @@ jobs:
           echo "TICKET_CONTRACT_ADDRESS=$TICKET_CONTRACT_ADDRESS" >> $GITHUB_ENV
           echo "Contract deployed at: $TICKET_CONTRACT_ADDRESS"
 
-      - name: Start API server
+            - name: Start API server
+        env:
+          # Set environment variables directly for CI
+          RPC_URL: "http://localhost:8545"
+          CHAIN_ID: "31337"
+          DEPLOYER_PRIVATE_KEY: ${{ secrets.HARDHAT_PRIVATE_KEY }}
+          TICKET_CONTRACT_ABI_PATH: "artifacts/contracts/Ticket.sol/Ticket.json"
         run: |
-          # Export environment variables from .env file
-          set -a
+          # Load contract address from .env file
           source .env
-          set +a
+          export TICKET_CONTRACT_ADDRESS
 
           echo "Starting API with contract address: $TICKET_CONTRACT_ADDRESS"
           echo "RPC URL: $RPC_URL"
@@ -175,15 +180,11 @@ jobs:
 
           # Test connection to Hardhat node
           echo "Testing connection to Hardhat node..."
-          if [ -n "$RPC_URL" ]; then
-            curl -X POST -H "Content-Type: application/json" \
-                 --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
-                 $RPC_URL || echo "Warning: Could not connect to Hardhat node"
-          else
-            echo "Error: RPC_URL not set"
-          fi
+          curl -X POST -H "Content-Type: application/json" \
+               --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
+               $RPC_URL || echo "Warning: Could not connect to Hardhat node"
 
-          # Start API server with exported environment variables
+          # Start API server with environment variables
           nohup poetry run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 > api.log 2>&1 &
 
           API_PID=$!
