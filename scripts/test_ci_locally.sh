@@ -64,6 +64,25 @@ if command -v npm >/dev/null 2>&1; then
         exit 1
     }
 
+    # Test artifacts directory permissions (CI-like check)
+    echo "📁 Testing artifacts directory permissions..."
+    if [ -d "artifacts" ]; then
+        echo "✅ artifacts directory exists"
+    else
+        echo "📂 Creating artifacts directory structure..."
+        mkdir -p artifacts/build-info artifacts/contracts || {
+            echo "❌ Cannot create artifacts directory - permission issue"
+            exit 1
+        }
+    fi
+
+    # Test write permissions
+    touch artifacts/test-write.tmp && rm artifacts/test-write.tmp || {
+        echo "❌ No write permission to artifacts directory"
+        exit 1
+    }
+    echo "✅ artifacts directory is writable"
+
     # Test Hardhat compilation
     echo "🔨 Testing contract compilation..."
     npx hardhat compile || {

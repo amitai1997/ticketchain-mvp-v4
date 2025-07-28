@@ -1,6 +1,7 @@
 # Hardhat files
 cache/
-artifacts/
+artifacts/*
+!artifacts/.gitkeep
 node_modules/
 coverage/
 coverage.json

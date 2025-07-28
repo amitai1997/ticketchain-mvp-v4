@@ -147,6 +147,13 @@ jobs:
             sleep 2
           done
 
+      - name: Prepare artifacts directory
+        run: |
+          # Create artifacts directory structure for Hardhat
+          mkdir -p artifacts/build-info
+          mkdir -p artifacts/contracts
+          chmod -R 755 artifacts/
+
       - name: Deploy contracts
         run: |
           npx hardhat run scripts/setup_dev.js --network localhost

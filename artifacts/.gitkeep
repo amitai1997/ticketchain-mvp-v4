@@ -1,0 +1,2 @@
+# This file ensures the artifacts directory is preserved in git
+# while the .gitignore still excludes the actual build artifacts
