@@ -9,6 +9,8 @@ import json
 from pathlib import Path
 from typing import Optional
 
+from src.config import settings
+
 
 class TicketRegistry:
     """Simple registry for mapping ticket IDs to blockchain token IDs."""
@@ -41,6 +43,12 @@ class TicketRegistry:
         """Check if a ticket ID is registered."""
         return ticket_id in self._registry
 
+    def clear(self) -> None:
+        """Clear all entries from the registry. Used for testing."""
+        self._registry.clear()
+        if self.storage_path:
+            self._save_to_disk()
+
     def _load_from_disk(self) -> None:
         """Load registry from disk."""
         if self.storage_path is None:
@@ -70,5 +78,5 @@ class TicketRegistry:
             pass
 
 
-# Global registry instance
-ticket_registry = TicketRegistry(storage_path="data/ticket_registry.json")
+# Global registry instance - None for tests, file-based for dev
+ticket_registry = TicketRegistry(storage_path=settings.ticket_registry_path)

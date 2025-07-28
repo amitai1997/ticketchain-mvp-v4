@@ -2,7 +2,6 @@
 Pytest configuration for integration tests.
 """
 
-import asyncio
 import sys
 from pathlib import Path
 
@@ -12,12 +11,19 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
-@pytest.fixture(scope="session")
-def event_loop():
-    """Create an instance of the default event loop for the test session."""
-    loop = asyncio.get_event_loop_policy().new_event_loop()
-    yield loop
-    loop.close()
+@pytest.fixture(autouse=True)
+def clean_registry():
+    """Reset the ticket registry before each test to ensure test isolation."""
+    from src.datastore.ticket_registry import ticket_registry
+
+    # Ensure tests use in-memory registry
+    ticket_registry.storage_path = None
+
+    # Clear the registry before each test
+    ticket_registry.clear()
+    yield
+    # Clear after test as well
+    ticket_registry.clear()
 
 
 def pytest_configure(config):
