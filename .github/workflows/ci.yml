@@ -167,10 +167,20 @@ jobs:
           # Load environment variables from .env file
           source .env
           echo "Starting API with contract address: $TICKET_CONTRACT_ADDRESS"
+          echo "RPC URL: $RPC_URL"
+
+          # Test connection to Hardhat node
+          echo "Testing connection to Hardhat node..."
+          curl -X POST -H "Content-Type: application/json" \
+               --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
+               $RPC_URL || echo "Warning: Could not connect to Hardhat node"
 
           # Export the variable so it's available to the subprocess
           export TICKET_CONTRACT_ADDRESS
-          poetry run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 &
+          export RPC_URL
+          nohup poetry run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 > api.log 2>&1 &
+          API_PID=$!
+          echo "API started with PID: $API_PID"
 
           # Wait for API to be ready with health check
           echo "Waiting for API server to be ready..."
@@ -182,6 +192,11 @@ jobs:
             echo "Waiting for API server... ($i/30)"
             sleep 2
           done
+
+          # Show API logs for debugging
+          echo "=== API Startup Logs ==="
+          head -20 api.log || true
+          echo "========================"
 
       - name: Verify API configuration
         run: |

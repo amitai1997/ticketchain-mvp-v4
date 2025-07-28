@@ -31,8 +31,16 @@ class Web3BlockchainService(BlockchainServiceInterface):
         self.w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
 
         # Check connection
-        if not self.w3.is_connected():
-            raise ConnectionError(f"Failed to connect to {settings.rpc_url}")
+        try:
+            if not self.w3.is_connected():
+                raise ConnectionError(
+                    f"Failed to connect to blockchain node at {settings.rpc_url}"
+                )
+            print(f"✅ Connected to blockchain node at {settings.rpc_url}")
+        except Exception as e:
+            raise ConnectionError(
+                f"Blockchain connection error to {settings.rpc_url}: {e}"
+            ) from e
 
         # Set up account from private key
         self.account = Account.from_key(settings.deployer_private_key)

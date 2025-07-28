@@ -38,19 +38,28 @@ async def get_blockchain_service() -> BlockchainServiceInterface:
     Returns mock service if no contract address is configured,
     otherwise returns the real Web3 implementation.
     """
+    import traceback
+
     from ..blockchain_service import Web3BlockchainService
     from ..config import settings
 
     # Use real service if contract address is configured
     if settings.ticket_contract_address:
         try:
-            return Web3BlockchainService()
+            print(
+                f"Attempting to initialize Web3BlockchainService with address: {settings.ticket_contract_address}"
+            )
+            service = Web3BlockchainService()
+            print("✅ Web3BlockchainService initialized successfully")
+            return service
         except Exception as e:
-            print(f"Failed to initialize Web3 service: {e}")
-            print("Falling back to mock service")
+            print(f"❌ Failed to initialize Web3 service: {e}")
+            print(f"❌ Error type: {type(e).__name__}")
+            print(f"❌ Traceback: {traceback.format_exc()}")
+            print("⚠️  Falling back to mock service")
             return MockBlockchainService()
     else:
-        # Fall back to mock service for development
+        print("ℹ️  No contract address configured, using mock service")
         return MockBlockchainService()
 
 
