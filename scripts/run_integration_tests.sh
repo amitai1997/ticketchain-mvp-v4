@@ -39,6 +39,11 @@ fi
 # Check if API is running
 if ! curl -s http://localhost:8000/api/v1/health > /dev/null; then
     echo -e "${YELLOW}⚠️  API server is not running. Starting it...${NC}"
+
+    # Source .env to ensure the API gets the contract address
+    source .env
+    echo -e "${GREEN}📋 Starting API with contract address: $TICKET_CONTRACT_ADDRESS${NC}"
+
     poetry run uvicorn src.api.main:app --reload &
     API_PID=$!
 

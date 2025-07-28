@@ -160,6 +160,21 @@ else
     echo "⚠️  .env.example not found"
 fi
 
+# Integration test configuration check
+echo "🔗 Testing integration test configuration..."
+if [ -f ".env" ]; then
+    source .env
+    if [ -n "$TICKET_CONTRACT_ADDRESS" ]; then
+        echo "✅ Contract address available for integration tests: $TICKET_CONTRACT_ADDRESS"
+        echo "💡 Integration tests will use Web3 blockchain service"
+    else
+        echo "⚠️  TICKET_CONTRACT_ADDRESS not set - integration tests will be skipped"
+        echo "💡 Run 'npx hardhat run scripts/deploy.js --network localhost' to deploy contract"
+    fi
+else
+    echo "⚠️  .env file not found - integration tests will be skipped"
+fi
+
 echo ""
 echo "🎉 Local CI simulation completed successfully!"
 echo ""

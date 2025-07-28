@@ -160,9 +160,13 @@ jobs:
           # Source the .env file to get the contract address
           source .env
           echo "TICKET_CONTRACT_ADDRESS=$TICKET_CONTRACT_ADDRESS" >> $GITHUB_ENV
+          echo "Contract deployed at: $TICKET_CONTRACT_ADDRESS"
 
       - name: Start API server
         run: |
+          # Load environment variables from .env file
+          source .env
+          echo "Starting API with contract address: $TICKET_CONTRACT_ADDRESS"
           poetry run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 &
 
           # Wait for API to be ready with health check
