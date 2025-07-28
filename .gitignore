@@ -69,6 +69,10 @@ Thumbs.db
 *.sqlite
 *.sqlite3
 
+# Data directory
+data/
+*.json
+
 # Temporary files
 tmp/
 temp/
