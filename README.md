@@ -57,27 +57,23 @@ poetry run uvicorn src.api.main:app --reload
 ```
 
 #### Docker Compose (Alternative)
+
+See **[Containerized Deployment Guide](docs/CONTAINERIZED_DEPLOYMENT.md)** for complete setup instructions.
+
+**Quick Start:**
 ```bash
-docker compose up -d                    # Start all services
-docker compose logs api                 # View API logs
-docker compose logs hardhat             # View blockchain logs
-docker compose down                     # Stop all services
+docker compose up -d && docker compose up deployer && npm run test:containerized
 ```
 
 > **Note**: Use `docker-compose` (legacy) if `docker compose` (V2) is not available.
 
 ### Verification
 
-After starting the system, verify everything is working:
+After starting the system, verify everything is working. See **[Containerized Deployment Guide](docs/CONTAINERIZED_DEPLOYMENT.md#-health-checks)** for complete health check commands.
 
+**Quick Check:**
 ```bash
-# Check API health
-curl http://localhost:8000/api/v1/health
-
-# Check Hardhat node is running
-curl -X POST -H "Content-Type: application/json" \
-     --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
-     http://localhost:8545
+curl -s http://localhost:8000/api/v1/health | jq .status
 ```
 
 **Web Interfaces:**
@@ -101,16 +97,22 @@ poetry run pytest --cov=src            # With coverage report
 poetry run pytest -v                   # Verbose output
 ```
 
-### CI Testing (Local)
+### Integration & E2E Testing
 ```bash
 npm run test:ci-local                   # Test CI-like conditions locally
-npm run test:integration                 # Run integration tests
+npm run test:integration                # Run integration tests (local setup)
+npm run test:containerized              # Test complete containerized stack
 ```
 Catches most CI issues before pushing: Poetry/npm problems, code quality issues, test failures, Docker configuration.
 
 ### Run All Tests
 ```bash
-npm test && npm run test:integration   # Quick test everything
+# Local testing
+npm test && npm run test:integration    # Quick test everything locally
+
+# Containerized testing (recommended for full E2E validation)
+# See: docs/CONTAINERIZED_DEPLOYMENT.md#-testing-workflows
+npm run test:containerized
 ```
 
 ## 📁 Project Structure

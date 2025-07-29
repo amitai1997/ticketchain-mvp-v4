@@ -11,6 +11,7 @@ Run `npm run` to see all available scripts. Here are the most commonly used:
 npm test                    # Run smart contract tests
 npm run test:ci-local       # Test CI-like conditions locally
 npm run test:integration    # Run integration tests with setup
+npm run test:containerized  # Test complete containerized setup
 
 # Deployment
 npm run deploy:local        # Deploy to local Hardhat network
@@ -83,13 +84,15 @@ poetry run mypy src                # Type checking
 
 ## 🐳 Docker Commands
 
+**📖 See [Containerized Deployment Guide](CONTAINERIZED_DEPLOYMENT.md) for complete Docker workflows.**
+
+**Quick Reference:**
 ```bash
-# Container Management (Docker Compose V2)
-docker compose up -d               # Start all services
-docker compose down                # Stop all services
-docker compose build               # Build containers
-docker compose logs api            # View API logs
-docker compose logs hardhat        # View blockchain logs
+# Essential commands
+docker compose up -d               # Start services
+docker compose up deployer         # Deploy contracts
+npm run test:containerized         # Test complete stack
+docker compose down                # Stop services
 
 # Legacy Docker Compose V1 (if V2 not available)
 # Replace 'docker compose' with 'docker-compose' in above commands
@@ -147,11 +150,14 @@ npx hardhat run scripts/deploy.js --network mainnet  # Deploy to mainnet
 
 ### Development Workflow
 ```bash
-# Typical development cycle
+# Typical development cycle (local)
 npm run test:ci-local              # 1. Test everything locally
 npm run deploy:local               # 2. Deploy contracts
 npm run test:integration           # 3. Run integration tests
 npm run format && npm run lint:sol # 4. Format and lint code
+
+# Alternative: containerized workflow (see CONTAINERIZED_DEPLOYMENT.md)
+npm run test:containerized         # Complete containerized validation
 ```
 
 ---
@@ -164,6 +170,7 @@ npm run format && npm run lint:sol # 4. Format and lint code
 | **Test contracts** | `npm test` | `npx hardhat test` |
 | **Integration tests** | `npm run test:integration` | `./scripts/run_integration_tests.sh` |
 | **Local CI testing** | `npm run test:ci-local` | `./scripts/test_ci_locally.sh` |
+| **Containerized testing** | `npm run test:containerized` | `./scripts/test_containerized_setup.sh` |
 | **Format code** | `npm run format` | `npx prettier --write "**/*.{js,json,sol,yml,yaml}"` |
 | **Lint Solidity** | `npm run lint:sol` | `npx solhint "contracts/**/*.sol"` |
 
