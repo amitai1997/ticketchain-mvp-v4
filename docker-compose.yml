@@ -40,7 +40,18 @@ services:
     networks:
       - ticketchain-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8545"]
+      test:
+        [
+          "CMD",
+          "curl",
+          "-X",
+          "POST",
+          "-H",
+          "Content-Type: application/json",
+          "-d",
+          '{"jsonrpc":"2.0","method":"net_version","params":[],"id":1}',
+          "http://localhost:8545",
+        ]
       interval: 5s
       timeout: 10s
       retries: 5
@@ -63,8 +74,7 @@ services:
         echo 'Contract deployment complete'
       "
     depends_on:
-      hardhat:
-        condition: service_healthy
+      - hardhat
     networks:
       - ticketchain-network
 

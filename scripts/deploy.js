@@ -67,7 +67,11 @@ async function main() {
 }
 
 function updateEnvFile(updates) {
-  const envPath = path.join(__dirname, '..', '.env');
+  // In containerized deployment, write to data directory which is mounted
+  const envPath =
+    process.env.NODE_ENV === 'docker' || fs.existsSync('/app/data')
+      ? path.join('/app/data', '.env')
+      : path.join(__dirname, '..', '.env');
   let envContent = '';
 
   // Read existing .env file if it exists

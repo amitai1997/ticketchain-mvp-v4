@@ -58,7 +58,8 @@ poetry run uvicorn src.api.main:app --reload
 
 #### Docker Compose (Alternative)
 ```bash
-docker compose up -d                    # Start all services
+docker compose up -d                    # Start API and Hardhat services
+docker compose up deployer              # Deploy contracts (run after services start)
 docker compose logs api                 # View API logs
 docker compose logs hardhat             # View blockchain logs
 docker compose down                     # Stop all services
@@ -101,16 +102,21 @@ poetry run pytest --cov=src            # With coverage report
 poetry run pytest -v                   # Verbose output
 ```
 
-### CI Testing (Local)
+### Integration & E2E Testing
 ```bash
 npm run test:ci-local                   # Test CI-like conditions locally
-npm run test:integration                 # Run integration tests
+npm run test:integration                # Run integration tests (local setup)
+npm run test:containerized              # Test complete containerized stack
 ```
 Catches most CI issues before pushing: Poetry/npm problems, code quality issues, test failures, Docker configuration.
 
 ### Run All Tests
 ```bash
-npm test && npm run test:integration   # Quick test everything
+# Local testing
+npm test && npm run test:integration    # Quick test everything locally
+
+# Containerized testing (recommended for full E2E validation)
+docker compose up -d && docker compose up deployer && npm run test:containerized
 ```
 
 ## 📁 Project Structure
