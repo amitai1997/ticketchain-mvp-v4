@@ -84,18 +84,15 @@ poetry run mypy src                # Type checking
 
 ## 🐳 Docker Commands
 
-```bash
-# Container Management (Docker Compose V2)
-docker compose up -d               # Start all services
-docker compose down                # Stop all services
-docker compose build               # Build containers
-docker compose logs api            # View API logs
-docker compose logs hardhat        # View blockchain logs
-docker compose up deployer         # Deploy contracts to containerized network
+**📖 See [Containerized Deployment Guide](CONTAINERIZED_DEPLOYMENT.md) for complete Docker workflows.**
 
-# Testing containerized setup
-npm run test:containerized         # Test complete containerized stack (recommended)
-./scripts/test_containerized_setup.sh  # Direct script execution
+**Quick Reference:**
+```bash
+# Essential commands
+docker compose up -d               # Start services
+docker compose up deployer         # Deploy contracts
+npm run test:containerized         # Test complete stack
+docker compose down                # Stop services
 
 # Legacy Docker Compose V1 (if V2 not available)
 # Replace 'docker compose' with 'docker-compose' in above commands
@@ -153,11 +150,14 @@ npx hardhat run scripts/deploy.js --network mainnet  # Deploy to mainnet
 
 ### Development Workflow
 ```bash
-# Typical development cycle
+# Typical development cycle (local)
 npm run test:ci-local              # 1. Test everything locally
 npm run deploy:local               # 2. Deploy contracts
 npm run test:integration           # 3. Run integration tests
 npm run format && npm run lint:sol # 4. Format and lint code
+
+# Alternative: containerized workflow (see CONTAINERIZED_DEPLOYMENT.md)
+npm run test:containerized         # Complete containerized validation
 ```
 
 ---

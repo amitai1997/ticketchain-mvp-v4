@@ -2,24 +2,19 @@
 
 set -e
 
+# Source shared health check utilities (DRY principle)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/health_checks.sh"
+
 echo "🐳 Testing Containerized TicketChain Setup"
 echo "==========================================="
-
-# Colors for output
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
 
 # Test function
 test_step() {
     echo -e "${YELLOW}Testing: $1${NC}"
 }
 
-success() {
-    echo -e "${GREEN}✅ $1${NC}"
-}
-
+# Override error function to exit on failure
 error() {
     echo -e "${RED}❌ $1${NC}"
     exit 1
@@ -35,22 +30,16 @@ fi
 
 # Test API health
 test_step "API health endpoint"
-HEALTH_RESPONSE=$(curl -s http://localhost:8000/api/v1/health)
-if echo "$HEALTH_RESPONSE" | grep -q '"status":"healthy"'; then
-    success "API health check passed"
-    echo "Contract address: $(echo "$HEALTH_RESPONSE" | jq -r '.contract_address')"
+if check_api_health >/dev/null; then
+    CONTRACT_ADDRESS=$(get_contract_address)
+    echo "Contract address: $CONTRACT_ADDRESS"
 else
     error "API health check failed"
 fi
 
 # Test blockchain connectivity
 test_step "Blockchain connectivity"
-RPC_RESPONSE=$(curl -s -X POST -H "Content-Type: application/json" \
-    -d '{"jsonrpc":"2.0","method":"net_version","params":[],"id":1}' \
-    http://localhost:8545)
-if echo "$RPC_RESPONSE" | grep -q '"result":"31337"'; then
-    success "Blockchain RPC connection successful"
-else
+if ! check_blockchain_connectivity >/dev/null; then
     error "Blockchain RPC connection failed"
 fi
 
