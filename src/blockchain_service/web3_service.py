@@ -7,7 +7,6 @@ from typing import Any, Optional
 
 from eth_account import Account
 from web3 import Web3
-from web3.middleware import ExtraDataToPOAMiddleware
 
 from ..config import get_contract_abi, settings
 from .interface import BlockchainServiceInterface
@@ -34,9 +33,6 @@ class Web3BlockchainService(BlockchainServiceInterface):
 
         # Initialize Web3 connection
         self.w3 = Web3(Web3.HTTPProvider(settings.rpc_url))
-
-        # Add middleware for PoA networks (like some testnets)
-        self.w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
 
         # Check connection
         if not self.w3.is_connected():
@@ -102,7 +98,7 @@ class Web3BlockchainService(BlockchainServiceInterface):
         )
 
         # Send transaction
-        tx_hash = self.w3.eth.send_raw_transaction(signed_tx.raw_transaction)
+        tx_hash = self.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
 
         # Wait for receipt
         receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash)
