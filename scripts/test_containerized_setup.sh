@@ -2,9 +2,9 @@
 
 set -e
 
-# Source shared health check utilities (DRY principle)
+# Source common utilities (DRY principle - use existing _common.sh)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${SCRIPT_DIR}/health_checks.sh"
+source "${SCRIPT_DIR}/_common.sh"
 
 echo "🐳 Testing Containerized TicketChain Setup"
 echo "==========================================="
@@ -30,7 +30,7 @@ fi
 
 # Test API health
 test_step "API health endpoint"
-if check_api_health >/dev/null; then
+if check_api_health; then
     CONTRACT_ADDRESS=$(get_contract_address)
     echo "Contract address: $CONTRACT_ADDRESS"
 else

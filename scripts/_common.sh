@@ -19,6 +19,22 @@ check_hardhat_node() {
     return 0
 }
 
+# Enhanced blockchain connectivity check with RPC validation
+check_blockchain_connectivity() {
+    local response
+    response=$(curl -s -X POST -H "Content-Type: application/json" \
+        -d '{"jsonrpc":"2.0","method":"net_version","params":[],"id":1}' \
+        http://localhost:8545 2>/dev/null || echo "")
+
+    if echo "$response" | grep -q '"result":"31337"'; then
+        echo -e "${GREEN}✅ Blockchain RPC connection successful${NC}"
+        return 0
+    else
+        echo -e "${RED}❌ Blockchain RPC connection failed${NC}"
+        return 1
+    fi
+}
+
 # Common function to check if API is running
 check_api_health() {
     if ! curl -s http://localhost:8000/api/v1/health > /dev/null; then
@@ -30,6 +46,41 @@ check_api_health() {
 # Common function to get API blockchain service type
 get_api_service_type() {
     curl -s http://localhost:8000/api/v1/health 2>/dev/null | grep -o '"blockchain_service":"[^"]*"' | cut -d'"' -f4 || echo "unknown"
+}
+
+# Common function to get contract address from API
+get_contract_address() {
+    local response
+    response=$(curl -s http://localhost:8000/api/v1/health 2>/dev/null || echo "")
+    echo "$response" | jq -r '.contract_address' 2>/dev/null || echo ""
+}
+
+# Enhanced API health check that returns response
+check_api_health_with_response() {
+    local response
+    response=$(curl -s http://localhost:8000/api/v1/health 2>/dev/null || echo "")
+
+    if echo "$response" | grep -q '"status":"healthy"'; then
+        echo -e "${GREEN}✅ API health check passed${NC}"
+        echo "$response"
+        return 0
+    else
+        echo -e "${RED}❌ API health check failed${NC}"
+        return 1
+    fi
+}
+
+# Utility functions for consistent messaging
+success() {
+    echo -e "${GREEN}✅ $1${NC}"
+}
+
+error() {
+    echo -e "${RED}❌ $1${NC}"
+}
+
+info() {
+    echo -e "${YELLOW}ℹ️  $1${NC}"
 }
 
 # Common function to check and display API service configuration
