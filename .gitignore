@@ -1,6 +1,7 @@
 # Hardhat files
 cache/
-artifacts/
+artifacts/*
+!artifacts/.gitkeep
 node_modules/
 coverage/
 coverage.json
@@ -68,6 +69,10 @@ Thumbs.db
 *.db
 *.sqlite
 *.sqlite3
+
+# Data directory
+data/
+*.json
 
 # Temporary files
 tmp/

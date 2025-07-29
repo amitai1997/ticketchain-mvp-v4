@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   # FastAPI Backend Service
   api:
@@ -12,10 +10,16 @@ services:
       - API_HOST=0.0.0.0
       - API_PORT=8000
       - DATABASE_URL=sqlite:///./data/ticketchain.db
+      - RPC_URL=http://hardhat:8545
+      - TICKET_CONTRACT_ADDRESS=${TICKET_CONTRACT_ADDRESS}
+      - DEPLOYER_PRIVATE_KEY=${DEPLOYER_PRIVATE_KEY:-0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80}
     volumes:
       - ./src:/app/src
       - ./data:/app/data
+      - ./artifacts:/app/artifacts
     command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - hardhat
     networks:
       - ticketchain-network
 
@@ -31,7 +35,36 @@ services:
       - ./scripts:/app/scripts
       - ./test:/app/test
       - ./hardhat.config.js:/app/hardhat.config.js
+      - ./artifacts:/app/artifacts
     command: npx hardhat node --hostname 0.0.0.0
+    networks:
+      - ticketchain-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8545"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  # Contract deployment service (runs once)
+  deployer:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.hardhat
+    volumes:
+      - ./contracts:/app/contracts
+      - ./scripts:/app/scripts
+      - ./artifacts:/app/artifacts
+      - ./data:/app/data
+      - ./hardhat.config.js:/app/hardhat.config.js
+    command: >
+      sh -c "
+        sleep 10 &&
+                  npx hardhat run scripts/deploy.js --network hardhat_docker &&
+        echo 'Contract deployment complete'
+      "
+    depends_on:
+      hardhat:
+        condition: service_healthy
     networks:
       - ticketchain-network
 

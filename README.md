@@ -18,7 +18,8 @@ This project implements a dual-stack architecture:
 
 **✅ Stage 1 Complete**: Foundation & Scaffolding
 **✅ Stage 2 Complete**: On-Chain Core (Smart Contracts)
-**🚧 Stage 3 Ready**: Off-Chain Core & Blockchain Integration
+**✅ Stage 3 Complete**: Off-Chain Core & Blockchain Integration - **FULLY FUNCTIONAL**
+**🚧 Stage 4 Ready**: Infrastructure & Quality Enhancements
 
 See [Project Status](docs/PROJECT_STATUS.md) for detailed progress tracking.
 
@@ -49,7 +50,7 @@ cp .env.example .env
 npx hardhat node
 
 # Terminal 2: Deploy contracts
-npx hardhat run scripts/deploy.js --network localhost
+npm run deploy:local
 
 # Terminal 3: Start API server
 poetry run uvicorn src.api.main:app --reload
@@ -57,11 +58,13 @@ poetry run uvicorn src.api.main:app --reload
 
 #### Docker Compose (Alternative)
 ```bash
-docker-compose up -d                    # Start all services
-docker-compose logs api                 # View API logs
-docker-compose logs hardhat             # View blockchain logs
-docker-compose down                     # Stop all services
+docker compose up -d                    # Start all services
+docker compose logs api                 # View API logs
+docker compose logs hardhat             # View blockchain logs
+docker compose down                     # Stop all services
 ```
+
+> **Note**: Use `docker-compose` (legacy) if `docker compose` (V2) is not available.
 
 ### Verification
 
@@ -98,9 +101,16 @@ poetry run pytest --cov=src            # With coverage report
 poetry run pytest -v                   # Verbose output
 ```
 
+### CI Testing (Local)
+```bash
+npm run test:ci-local                   # Test CI-like conditions locally
+npm run test:integration                 # Run integration tests
+```
+Catches most CI issues before pushing: Poetry/npm problems, code quality issues, test failures, Docker configuration.
+
 ### Run All Tests
 ```bash
-npm test && poetry run pytest          # Quick test everything
+npm test && npm run test:integration   # Quick test everything
 ```
 
 ## 📁 Project Structure
@@ -152,15 +162,19 @@ For detailed technology versions and descriptions, see **[Technology Stack Refer
 
 ### Implemented ✅
 - **ERC-721 NFT Tickets**: Each ticket is a unique, transferable NFT
-- **Lifecycle Management**: Mint → Check-in → Invalidate state transitions
+- **Lifecycle Management**: Full ticket lifecycle (Mint → Resell → Check-in → Invalidate)
+- **API Gateway**: Complete HTTP endpoints for blockchain interaction
+- **Web3 Integration**: Full blockchain service with transaction management
 - **Access Control**: Secure administrative functions
-- **Comprehensive Testing**: 19 tests with 100% coverage
+- **Ticket Registry**: Off-chain mapping and state management
+- **Comprehensive Testing**: 26 tests across all layers with 100% coverage
 - **CI/CD Pipeline**: Automated testing and quality checks
+- **Live System**: Fully functional API server with blockchain integration
 
 ### In Development 🚧
-- **API Gateway**: HTTP endpoints for blockchain interaction
-- **Event Management**: Create and manage events via API
-- **User Wallets**: Custodial wallet management for ticket holders
+- **Event Management**: Enhanced event lifecycle management
+- **User Authentication**: JWT-based user management system
+- **Advanced Analytics**: Ticket sales and usage analytics
 
 ### Planned 📋
 - **Secondary Markets**: Ticket resale functionality
@@ -176,7 +190,7 @@ For detailed technology versions and descriptions, see **[Technology Stack Refer
 npx hardhat compile                     # Compile contracts
 npx hardhat test                       # Run tests
 npx hardhat node                       # Start local blockchain
-npx hardhat run scripts/deploy.js      # Deploy contracts
+npm run deploy:local                 # Deploy contracts
 npx hardhat console --network localhost # Interactive console
 ```
 
@@ -189,10 +203,11 @@ poetry run ruff check src tests                 # Lint code
 poetry run mypy src                              # Type checking
 ```
 
-#### Code Quality
+#### Code Quality & CI Testing
 ```bash
 poetry run pre-commit install          # Setup pre-commit hooks
 poetry run pre-commit run --all-files  # Run all quality checks
+npm run test:ci-local                   # Test CI-like conditions locally
 ```
 
 > **💡 Tip:** See [Development Commands Reference](docs/COMMANDS.md) for comprehensive command documentation and advanced usage.

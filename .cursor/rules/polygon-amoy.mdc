@@ -4,6 +4,7 @@ alwaysApply: true
 Cursor Rules – Polygon Amoy
 
 Network Setup
+	•	Configure RPC: https://rpc-amoy.polygon.technology with chainId = 80002.
 	•	Add Amoy in wallet using JSON-RPC details, not preset networks.
 	•	Pin public RPC endpoints; fallback to private node when throughput critical.
 	•	Use gas price oracle; avoid fixed gas values.
