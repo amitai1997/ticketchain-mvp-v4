@@ -31,7 +31,7 @@ def contract_address():
     """Get the deployed contract address from environment."""
     address = os.getenv("TICKET_CONTRACT_ADDRESS")
     if not address:
-        pytest.skip("TICKET_CONTRACT_ADDRESS not set - run setup_dev.js first")
+        pytest.skip("TICKET_CONTRACT_ADDRESS not set - run deploy.js first")
     return address
 
 

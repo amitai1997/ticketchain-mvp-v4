@@ -5,6 +5,9 @@
   "scripts": {
     "test": "hardhat test",
     "test:ci-local": "./scripts/test_ci_locally.sh",
+    "test:integration": "./scripts/run_integration_tests.sh",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
+    "deploy": "hardhat run scripts/deploy.js",
     "format": "prettier --write \"**/*.{js,json,sol,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{js,json,sol,yml,yaml}\"",
     "lint:sol": "solhint \"contracts/**/*.sol\"",

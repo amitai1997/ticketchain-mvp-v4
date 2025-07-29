@@ -37,7 +37,7 @@ Started HTTP and WebSocket JSON-RPC server at http://127.0.0.1:8545/
 In a new terminal, deploy the Ticket contract:
 
 ```bash
-npx hardhat run scripts/setup_dev.js --network localhost
+  npm run deploy:local
 ```
 
 This will output a contract address. Copy it and add to your `.env` file:

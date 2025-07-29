@@ -2,12 +2,33 @@ const hre = require('hardhat');
 const fs = require('fs');
 const path = require('path');
 
+// Detect if this is being run in development mode
+const isDevelopmentMode =
+  process.argv.includes('--dev') ||
+  hre.network.name === 'localhost' ||
+  hre.network.name === 'hardhat' ||
+  hre.network.name === 'hardhat_docker';
+
 async function main() {
-  console.log('Deploying Ticket contract...');
+  if (isDevelopmentMode) {
+    console.log('🚀 Starting development setup...\n');
+  } else {
+    console.log('Deploying Ticket contract...');
+  }
 
   // Get the deployer's signer
   const [deployer] = await hre.ethers.getSigners();
-  console.log('Deploying contract with account:', deployer.address);
+
+  if (isDevelopmentMode) {
+    console.log('Deploying contracts with account:', deployer.address);
+    console.log(
+      'Account balance:',
+      (await hre.ethers.provider.getBalance(deployer.address)).toString()
+    );
+    console.log('\n📝 Deploying Ticket contract...');
+  } else {
+    console.log('Deploying contract with account:', deployer.address);
+  }
 
   // Deploy the Ticket contract
   const Ticket = await hre.ethers.getContractFactory('Ticket');
@@ -16,20 +37,33 @@ async function main() {
   await ticket.waitForDeployment();
 
   const contractAddress = await ticket.getAddress();
-  console.log('Ticket contract deployed to:', contractAddress);
-  console.log('Contract owner:', await ticket.owner());
-  console.log('Token name:', await ticket.name());
-  console.log('Token symbol:', await ticket.symbol());
+
+  if (isDevelopmentMode) {
+    console.log('✅ Ticket contract deployed to:', contractAddress);
+  } else {
+    console.log('Ticket contract deployed to:', contractAddress);
+    console.log('Contract owner:', await ticket.owner());
+    console.log('Token name:', await ticket.name());
+    console.log('Token symbol:', await ticket.symbol());
+  }
 
   // Update .env file with deployment information
-  updateEnvFile({
+  const deploymentInfo = {
     TICKET_CONTRACT_ADDRESS: contractAddress,
     DEPLOYMENT_NETWORK: hre.network.name,
     DEPLOYMENT_CONTRACT_ADDRESS: contractAddress,
     DEPLOYMENT_DEPLOYER_ADDRESS: deployer.address,
-  });
+  };
 
-  console.log('\n✅ Deployment information saved to .env file');
+  updateEnvFile(deploymentInfo);
+
+  if (isDevelopmentMode) {
+    console.log('\n✨ Setup complete!');
+    console.log(`📋 Contract deployed at: ${contractAddress}`);
+    console.log('📁 Deployment info saved to .env file');
+  } else {
+    console.log('\n✅ Deployment information saved to .env file');
+  }
 }
 
 function updateEnvFile(updates) {

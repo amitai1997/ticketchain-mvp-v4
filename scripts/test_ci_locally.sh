@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Source common utilities
+source "$(dirname "$0")/_common.sh"
+
 echo "🧪 Testing CI-like conditions locally"
 echo "======================================"
 
@@ -109,7 +112,7 @@ if command -v docker >/dev/null 2>&1; then
     echo "🐳 Testing Docker availability..."
     docker --version
 
-            if docker compose version >/dev/null 2>&1; then
+    if docker compose version >/dev/null 2>&1; then
         echo "✅ Docker Compose V2 is available"
         DOCKER_COMPOSE_CMD=("docker" "compose")
     elif command -v docker-compose >/dev/null 2>&1; then
@@ -162,35 +165,20 @@ fi
 
 # Integration test configuration check
 echo "🔗 Testing integration test configuration..."
-if [ -f ".env" ]; then
-    source .env
-    if [ -n "$TICKET_CONTRACT_ADDRESS" ]; then
-        echo "✅ Contract address available for integration tests: $TICKET_CONTRACT_ADDRESS"
-        echo "💡 Integration tests will use Web3 blockchain service"
+if load_env_file; then
+    echo "💡 Integration tests will use Web3 blockchain service"
 
-        # Check if API is running and verify service type
-        if curl -s http://localhost:8000/api/v1/health >/dev/null 2>&1; then
-            SERVICE_TYPE=$(curl -s http://localhost:8000/api/v1/health 2>/dev/null | grep -o '"blockchain_service":"[^"]*"' | cut -d'"' -f4 || echo "unknown")
-            if [ "$SERVICE_TYPE" = "Web3BlockchainService" ]; then
-                echo "✅ Running API is using Web3BlockchainService"
-            elif [ "$SERVICE_TYPE" = "MockBlockchainService" ]; then
-                echo "⚠️  Running API is using MockBlockchainService (restart with contract address)"
-            else
-                echo "ℹ️  API service type: $SERVICE_TYPE"
-            fi
-        else
-            echo "ℹ️  API not running (will be configured properly when started)"
-        fi
-    else
-        echo "⚠️  TICKET_CONTRACT_ADDRESS not set - integration tests will be skipped"
-        echo "💡 Run 'npx hardhat run scripts/deploy.js --network localhost' to deploy contract"
-    fi
+    # Check if API is running and verify service type
+    check_api_service_config || {
+        echo "ℹ️  API not running or using mock service"
+    }
 else
-    echo "⚠️  .env file not found - integration tests will be skipped"
+    echo -e "${YELLOW}⚠️  TICKET_CONTRACT_ADDRESS not set - integration tests will be skipped${NC}"
+    echo "💡 Run 'npm run deploy:local' to deploy contract"
 fi
 
 echo ""
-echo "🎉 Local CI simulation completed successfully!"
+echo -e "${GREEN}🎉 Local CI simulation completed successfully!${NC}"
 echo ""
 echo "💡 This script tests most CI conditions locally, but some issues are CI-specific:"
 echo "   - Network connectivity problems (SSL/TLS issues)"

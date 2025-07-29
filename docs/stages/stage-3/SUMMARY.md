@@ -139,7 +139,7 @@ Stage 3 is complete and ready for:
 - `tests/integration/test_ticket_lifecycle.py`
 - `tests/integration/test_api_health.py`
 - `tests/conftest.py`
-- `scripts/setup_dev.js`
+- `scripts/deploy.js` (consolidated deployment script)
 - `scripts/run_integration_tests.sh`
 - `docs/stages/stage-3/README.md`
 - `docs/stages/stage-3/QUICKSTART.md`

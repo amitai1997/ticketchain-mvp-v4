@@ -40,7 +40,7 @@ This script handles:
 
 2. **Deploy Contracts**:
    ```bash
-   npx hardhat run scripts/setup_dev.js --network localhost
+        npm run deploy:local
    ```
 
 3. **Set Contract Address**:

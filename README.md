@@ -50,7 +50,7 @@ cp .env.example .env
 npx hardhat node
 
 # Terminal 2: Deploy contracts
-npx hardhat run scripts/deploy.js --network localhost
+npm run deploy:local
 
 # Terminal 3: Start API server
 poetry run uvicorn src.api.main:app --reload
@@ -104,13 +104,13 @@ poetry run pytest -v                   # Verbose output
 ### CI Testing (Local)
 ```bash
 npm run test:ci-local                   # Test CI-like conditions locally
-./scripts/test_ci_locally.sh            # Direct script execution
+npm run test:integration                 # Run integration tests
 ```
 Catches most CI issues before pushing: Poetry/npm problems, code quality issues, test failures, Docker configuration.
 
 ### Run All Tests
 ```bash
-npm test && poetry run pytest          # Quick test everything
+npm test && npm run test:integration   # Quick test everything
 ```
 
 ## 📁 Project Structure
@@ -190,7 +190,7 @@ For detailed technology versions and descriptions, see **[Technology Stack Refer
 npx hardhat compile                     # Compile contracts
 npx hardhat test                       # Run tests
 npx hardhat node                       # Start local blockchain
-npx hardhat run scripts/deploy.js      # Deploy contracts
+npm run deploy:local                 # Deploy contracts
 npx hardhat console --network localhost # Interactive console
 ```
 
